@@ -1,4 +1,5 @@
 import UVNode from '../nodes/accessors/UVNode.js';
+import BoolNode from './BoolNode.js';
 import IntNode from '../nodes/inputs/IntNode.js';
 import FloatNode from '../nodes/inputs/FloatNode.js';
 import Vector2Node from '../nodes/inputs/Vector2Node.js';
@@ -8,8 +9,8 @@ import TextureNode from '../nodes/inputs/TextureNode.js';
 const attributeNodes = {uv: new UVNode()};
 
 const uniformNodes = {
-	cameraIsMoving: new IntNode(), //there is no BoolNode
-	sceneIsDynamic: new IntNode(),
+	cameraIsMoving: new BoolNode(),
+	sceneIsDynamic: new BoolNode(),
 	
 	sampleCounter  : new IntNode(),
 	frameCounter   : new IntNode(),
