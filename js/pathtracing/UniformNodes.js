@@ -1,4 +1,3 @@
-import UVNode from '../nodes/accessors/UVNode.js';
 import BoolNode from './BoolNode.js';
 import IntNode from '../nodes/inputs/IntNode.js';
 import FloatNode from '../nodes/inputs/FloatNode.js';
@@ -6,9 +5,7 @@ import Vector2Node from '../nodes/inputs/Vector2Node.js';
 import Matrix4Node from '../nodes/inputs/Matrix4Node.js';
 import TextureNode from '../nodes/inputs/TextureNode.js';
 
-const attributeNodes = {uv: new UVNode()};
-
-const uniformNodes = {
+export {
 	cameraIsMoving: new BoolNode(),
 	sceneIsDynamic: new BoolNode(),
 	
@@ -33,5 +30,3 @@ const uniformNodes = {
 	previousTexture : new TextureNode(null, null),
 	blueNoiseTexture: new TextureNode(null, null)
 };
-
-export {attributeNodes, uniformNodes};
