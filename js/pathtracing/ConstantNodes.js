@@ -1,6 +1,8 @@
 import createConstantNode from './ConstantNode.js';
 
 export {
+	ZERO: createConstantNode(0.0, true),
+	
 	PI:               createConstantNode(Math.PI),
 	TWO_PI:           createConstantNode(2 * Math.PI),
 	FOUR_PI:          createConstantNode(4 * Math.PI),
