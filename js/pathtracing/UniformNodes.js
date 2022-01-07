@@ -5,28 +5,26 @@ import Vector2Node from '../nodes/inputs/Vector2Node.js';
 import Matrix4Node from '../nodes/inputs/Matrix4Node.js';
 import TextureNode from '../nodes/inputs/TextureNode.js';
 
-export {
-	cameraIsMoving: new BoolNode(),
-	sceneIsDynamic: new BoolNode(),
-	
-	sampleCounter  : new IntNode(),
-	frameCounter   : new IntNode(),
-	samplesPerFrame: new IntNode(),
-	
-	frameBlendingAmount: new FloatNode(),
-	
-	eps_intersect: new FloatNode(),
-	time         : new FloatNode(),
-	uLength      : new FloatNode(),
-	vLength      : new FloatNode(),
-	apertureSize : new FloatNode(),
-	focusDistance: new FloatNode(),
-	
-	resolution: new Vector2Node(),
-	randomVec2: new Vector2Node(),
-	
-	cameraMatrix: new Matrix4Node(),
-	
-	previousTexture : new TextureNode(null, null),
-	blueNoiseTexture: new TextureNode(null, null)
-};
+export const cameraIsMoving = new BoolNode();
+export const sceneIsDynamic = new BoolNode();
+
+export const sampleCounter   = new IntNode();
+export const frameCounter    = new IntNode();
+export const samplesPerFrame = new IntNode();
+
+export const frameBlendingAmount = new FloatNode();
+
+export const eps_intersect = new FloatNode();
+export const time          = new FloatNode();
+export const uLength       = new FloatNode();
+export const vLength       = new FloatNode();
+export const apertureSize  = new FloatNode();
+export const focusDistance = new FloatNode();
+
+export const resolution = new Vector2Node();
+export const randomVec2 = new Vector2Node();
+
+export const cameraMatrix = new Matrix4Node();
+
+export const previousTexture  = new TextureNode(null, null);
+export const blueNoiseTexture = new TextureNode(null, null);

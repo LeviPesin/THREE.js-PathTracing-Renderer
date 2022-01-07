@@ -5,15 +5,24 @@ import CondNode from '../../nodes/math/CondNode.js';
 import VarNode from '../../nodes/core/VarNode.js';
 import {ZERO, INFINITY} from '../ConstantNodes.js';
 
-export default function PlaneIntersect(plane, rayOrigin, rayDirection) {
+function planeExtDefIntersect(planePosition, planeNormal, rayOrigin, rayDirection, singleSided = false) {
+	const denominator = new VarNode(new MathNode(MathNode.DOT, planeNormal, rayDirection));
+	
+	const rayToPlane = new OperatorNode('-', planePosition, rayOrigin);
+	const result = new VarNode(new OperatorNode('/', new MathNode(MathNode.DOT, rayToPlane, planeNormal), denominator));
+	
+	const actualResult = new CondNode(new OperatorNode('>', result, ZERO), result, INFINITY);
+	
+	if (singleSided)
+		return new CondNode(new OperatorNode('>', denominator, ZERO), INFINITY, actualResult);
+	else
+		return actualResult;
+}
+
+function planeIntersect(plane, rayOrigin, rayDirection, singleSided = false) {
 	const normal = new SplitNode(plane, 'xyz');
-	const denominator = new MathNode(MathNode.DOT, normal, rayDirection);
-	
-	const planeOrigToRayOrig = new OperatorNode('-', new OperatorNode('*', new SplitNode(plane, 'w'), normal), rayOrigin);
-	let result = new OperatorNode('/', new MathNode(MathNode.DOT, planeOrigToRayOrig, normal), denominator);
-	
-	result = new VarNode(result); //make result a variable rather than an expression
-	//TODO: test without this line, not sure whether it is needed or not
-	
-	return new CondNode(new OperatorNode('>', result, ZERO), result, INFINITY);
-};
+	const position = new OperatorNode('*', new SplitNode(plane, 'w'), normal);
+	return planeExtDefIntersect(position, normal, rayOrigin, rayDirection, singleSided);
+}
+
+export {planeExtDefIntersect, planeIntersect};
