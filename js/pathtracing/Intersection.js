@@ -47,10 +47,12 @@ function getIntersectionPoint(ray, intersection) {
 		return makeVarNode(new CondNode(node.node, mapGetArr(arr2), INFINITY));
 	}
 	
-	if (mapHasArr([ray, node]))
-		return mapGetArr([ray, node]);
+	const arr3 = [ray, node]
+	if (mapHasArr(arr3))
+		return mapGetArr(arr3);
+	
 	const point = makeVarNode(new OperatorNode('+', ray.origin, new OperatorNode('*', intersection, ray.direction)));
-	mapSetArr([ray, node], point);
+	mapSetArr(arr3, point);
 	return point;
 }
 

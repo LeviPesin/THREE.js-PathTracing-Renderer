@@ -1,6 +1,12 @@
 import createConstantNode from './ConstantNode.js';
 
-export const ZERO = createConstantNode(0.0, true);
+export const ZERO     = createConstantNode(0.0, true);
+export const HALF     = createConstantNode(0.5);
+export const NEG_HALF = createConstantNode(-0.5);
+export const ONE      = createConstantNode(1.0, true);
+export const NEG_ONE  = createConstantNode(-1.0, true);
+export const TWO      = createConstantNode(2.0, true);
+export const NEG_TWO  = createConstantNode(-2.0, true);
 
 export const PI               = createConstantNode(Math.PI);
 export const TWO_PI           = createConstantNode(2 * Math.PI);
