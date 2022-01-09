@@ -7,11 +7,11 @@ import {ZERO, HALF} from '../ConstantNodes.js';
 import Intersection from '../Intersection.js';
 
 export default function slabIntersect({depth, position, normal}, ray, singleSided = false) {
-	const trueNormal = new CondNode(
+	const trueNormal = new VarNode(new CondNode(
 		new OperatorNode('<', new MathNode(MathNode.DOT, normal, ray.direction), ZERO),
 		normal,
 		new MathNode(MathNode.NEGATE, normal)
-	);
+	));
 	
 	const radius = new VarNode(new OperatorNode('*', depth, HALF));
 	const trueRadius = new CondNode(
@@ -21,7 +21,7 @@ export default function slabIntersect({depth, position, normal}, ray, singleSide
 	);
 	
 	return planeIntersect({
-		position: new OperatorNode('+', position, new OperatorNode('*', trueRadius, trueNormal)),
+		position: new VarNode(new OperatorNode('+', position, new OperatorNode('*', trueRadius, trueNormal))),
 		normal: trueNormal
 	}, ray, singleSided);
 }

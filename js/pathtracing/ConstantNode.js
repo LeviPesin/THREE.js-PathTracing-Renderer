@@ -34,4 +34,4 @@ export default function createConstantNode(value, forceFloat = false) {
 	node.setConst(true);
 	
 	return node;
-};
+}

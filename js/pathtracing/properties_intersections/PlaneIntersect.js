@@ -11,8 +11,7 @@ export default function planeIntersect(planeProperties, ray, singleSided = false
 	
 	if (planeProperties.plane) {
 		const normal = new VarNode(new SplitNode(planeProperties.plane, 'xyz'));
-		plane = {normal, position: new OperatorNode('*', new SplitNode(planeProperties.plane, 'w'), normal)}; //do not make this a variable
-																											  //because it is used only once
+		plane = {normal, position: new VarNode(new OperatorNode('*', new SplitNode(planeProperties.plane, 'w'), normal))};
 	}
 	
 	const denominator = new VarNode(new MathNode(MathNode.DOT, plane.normal, ray.direction));
