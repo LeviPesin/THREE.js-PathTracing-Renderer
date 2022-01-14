@@ -1,4 +1,5 @@
 import createConstantNode from './ConstantNode.js';
+import {Vector3} from '../three.module.js';
 
 export const ZERO     = createConstantNode(0.0, true);
 export const HALF     = createConstantNode(0.5);
@@ -18,7 +19,8 @@ export const PI_OVER_TWO      = createConstantNode(Math.PI / 2);
 export const ONE_OVER_THREE   = createConstantNode(1 / 3);
 export const E                = createConstantNode(Math.E);
 
-export const INFINITY = createConstantNode(1000000.0, true);
+export const INFINITY      = createConstantNode(1000000.0, true);
+export const INFINITY_VEC3 = createConstantNode(new Vector3(INFINITY.value, INFINITY.value, INFINITY.value));
 
 export const SPOT_LIGHT  = createConstantNode(-2);
 export const POINT_LIGHT = createConstantNode(-1);
