@@ -1,8 +1,23 @@
 let lastUsedID = -1;
 
 export default class RaytracingObject {
-	constructor(type) {
+	constructor(shape) {
 		this.id = ++lastUsedID;
-		this.type = type;
+		this.shape = shape;
+		this.rayIntersections = new Map();
+	}
+	
+	intersect(ray) {
+		if (this.rayIntersections.has(ray))
+			return this.rayIntersections.get(ray);
+		const intersections = this.shape.intersect(ray);
+		this.rayIntersections.set(ray, intersections);
+		intersections.intersections.forEach(this.calculateIntersectionsProperties.bind(this));
+		intersections.object = this;
+		return intersections;
+	}
+	
+	calculateIntersectionsProperties(intersection) {
+		//Abstract function. Should be used for calculating intersections' properties like color.
 	}
 }

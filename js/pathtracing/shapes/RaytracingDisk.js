@@ -5,10 +5,10 @@ import CondNode from '../../nodes/math/CondNode.js';
 import makeVarNode from '../makeVarNode.js';
 import createConstantNode from '../ConstantNode.js';
 import {INFINITY, INFINITY_VEC3} from '../ConstantNodes.js';
-import RaytracingObject from '../RaytracingObject.js';
+import RaytracingShape from '../RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
-export default class RaytracingDisk extends RaytracingObject {
+export default class RaytracingDisk extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
@@ -30,7 +30,7 @@ export default class RaytracingDisk extends RaytracingObject {
 		
 		const cond = makeVarNode(new OperatorNode('>', distanceSquared, radiusSquared));
 		
-		intersections.object = this;
+		intersections.shape = this;
 		intersections.intersection[0].distance = new CondNode(cond, INFINITY,      intersections.intersection[0].distance);
 		intersections.intersection[0].point    = new CondNode(cond, INFINITY_VEC3, intersections.intersection[0].point);
 	

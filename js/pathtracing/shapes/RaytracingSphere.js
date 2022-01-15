@@ -7,9 +7,9 @@ import createConstantNode from '../ConstantNode.js';
 import {ZERO, ONE, TWO, INFINITY} from '../ConstantNodes.js';
 import solveQuadratic from '../SolveQuadratic.js';
 import {Intersection, RayObjectIntersections} from '../Intersections.js';
-import RaytracingObject from '../RaytracingObject.js';
+import RaytracingShape from '../RaytracingShape.js';
 
-export default class RaytracingSphere extends RaytracingObject {
+export default class RaytracingSphere extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
@@ -47,7 +47,7 @@ export default class RaytracingSphere extends RaytracingObject {
 		});
 		
 		return new RayObjectIntersections({
-			object: this,
+			shape: this,
 			ray,
 			intersections: [intersection1, intersection2]
 		});

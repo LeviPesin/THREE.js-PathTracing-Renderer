@@ -9,8 +9,8 @@ export class Intersection {
 }
 
 export class RayObjectIntersections {
-	constructor({object, ray, intersections}) {
-		this.object = object;
+	constructor({shape, ray, intersections}) {
+		this.shape = shape;
 		this.ray = ray;
 		this.intersections = intersections; //sorted by distance
 											//last elements can have distance = INFINITY

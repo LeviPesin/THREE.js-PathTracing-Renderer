@@ -6,10 +6,10 @@ import makeVarNode from '../makeVarNode.js';
 import createConstantNode from '../ConstantNode.js';
 import {RayObjectIntersections} from '../Intersections.js';
 import {ZERO, HALF} from '../ConstantNodes.js';
-import RaytracingObject from '../RaytracingObject.js';
+import RaytracingShape from '../RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
-export default class RaytracingSlab extends RaytracingObject {
+export default class RaytracingSlab extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
@@ -46,7 +46,7 @@ export default class RaytracingSlab extends RaytracingObject {
 		}, ray).intersections[0];
 		
 		return new RayObjectIntersections({
-			object: this,
+			shape: this,
 			ray,
 			intersections: [intersection1, intersection2]
 		});

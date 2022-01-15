@@ -5,7 +5,7 @@ import CondNode from '../../nodes/math/CondNode.js';
 import makeVarNode from '../makeVarNode.js';
 import createConstantNode from '../ConstantNode.js';
 import {TWO, INFINITY, INFINITY_VEC3} from '../ConstantNodes.js';
-import RaytracingObject from '../RaytracingObject.js';
+import RaytracingShape from '../RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
 const ZERO_POINT_NINE = createConstantNode(0.9);
@@ -13,7 +13,7 @@ const ZERO_POINT_NINE = createConstantNode(0.9);
 const Y = createConstantNode(new Vector3(0, 1, 0));
 const X = createConstantNode(new Vector3(1, 0, 0));
 
-export default class RaytracingRectangle extends RaytracingObject {
+export default class RaytracingRectangle extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
@@ -46,7 +46,7 @@ export default class RaytracingRectangle extends RaytracingObject {
 			new OperatorNode('>', new MathNode(MathNode.ABS, new MathNode(MathNode.DOT, V, distanceVector)), sideV)
 		);
 		
-		intersections.object = this;
+		intersections.shape = this;
 		intersections.intersection[0].distance = new CondNode(cond, INFINITY,      intersections.intersection[0].distance);
 		intersections.intersection[0].point    = new CondNode(cond, INFINITY_VEC3, intersections.intersection[0].point);
 	
