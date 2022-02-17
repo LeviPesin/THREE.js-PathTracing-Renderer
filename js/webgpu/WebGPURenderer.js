@@ -92,7 +92,6 @@ class WebGPURenderer {
 		this._adapter = null;
 		this._device = null;
 		this._context = null;
-		this._swapChain = null;
 		this._colorBuffer = null;
 		this._depthBuffer = null;
 
@@ -166,15 +165,14 @@ class WebGPURenderer {
 
 		const context = ( parameters.context !== undefined ) ? parameters.context : this.domElement.getContext( 'webgpu' );
 
-		const swapChain = context.configure( {
+		context.configure( {
 			device: device,
-			format: GPUTextureFormat.BGRA8Unorm // this is the only valid swap chain format right now (r121)
+			format: GPUTextureFormat.BGRA8Unorm // this is the only valid context format right now (r121)
 		} );
 
 		this._adapter = adapter;
 		this._device = device;
 		this._context = context;
-		this._swapChain = swapChain;
 
 		this._info = new WebGPUInfo();
 		this._properties = new WebGPUProperties();
@@ -195,7 +193,7 @@ class WebGPURenderer {
 			colorAttachments: [ {
 				view: null
 			} ],
-			 depthStencilAttachment: {
+			depthStencilAttachment: {
 				view: null,
 				depthStoreOp: GPUStoreOp.Store,
 				stencilStoreOp: GPUStoreOp.Store
@@ -315,7 +313,7 @@ class WebGPURenderer {
 
 		// finish render pass
 
-		passEncoder.endPass();
+		passEncoder.end();
 		device.queue.submit( [ cmdEncoder.finish() ] );
 
 	}
@@ -489,7 +487,7 @@ class WebGPURenderer {
 
 		} else {
 
-			format = GPUTextureFormat.BGRA8Unorm; // default swap chain format
+			format = GPUTextureFormat.BGRA8Unorm; // default context format
 
 		}
 
@@ -622,7 +620,7 @@ class WebGPURenderer {
 
 		}
 
-		passEncoder.endPass();
+		passEncoder.end();
 		device.queue.submit( [ cmdEncoder.finish() ] );
 
 	}

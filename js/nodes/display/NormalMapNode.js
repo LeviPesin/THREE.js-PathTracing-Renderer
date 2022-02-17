@@ -6,9 +6,11 @@ import OperatorNode from '../math/OperatorNode.js';
 import FloatNode from '../inputs/FloatNode.js';
 import TempNode from '../core/TempNode.js';
 import ModelNode from '../accessors/ModelNode.js';
+import SplitNode from '../utils/SplitNode.js';
+import JoinNode from '../utils/JoinNode.js';
 import { ShaderNode, cond, add, mul, dFdx, dFdy, cross, max, dot, normalize, inversesqrt, equal } from '../ShaderNode.js';
 
-import { TangentSpaceNormalMap, ObjectSpaceNormalMap } from '../../../../../build/three.module.js';
+import { TangentSpaceNormalMap, ObjectSpaceNormalMap } from 'three';
 
 // Normal Mapping Without Precomputed Tangents
 // http://www.thetenthplanet.de/archives/1180
@@ -39,11 +41,12 @@ const perturbNormal2ArbNode = new ShaderNode( ( inputs ) => {
 
 class NormalMapNode extends TempNode {
 
-	constructor( node ) {
+	constructor( node, scaleNode = null ) {
 
 		super( 'vec3' );
 
 		this.node = node;
+		this.scaleNode = scaleNode;
 
 		this.normalMapType = TangentSpaceNormalMap;
 
@@ -53,10 +56,17 @@ class NormalMapNode extends TempNode {
 
 		const type = this.getNodeType( builder );
 
-		const normalMapType = this.normalMapType;
+		const { normalMapType, scaleNode } = this;
 
 		const normalOP = new OperatorNode( '*', this.node, new FloatNode( 2.0 ).setConst( true ) );
-		const normalMap = new OperatorNode( '-', normalOP, new FloatNode( 1.0 ).setConst( true ) );
+		let normalMap = new OperatorNode( '-', normalOP, new FloatNode( 1.0 ).setConst( true ) );
+
+		if ( scaleNode !== null ) {
+
+			const normalMapScale = new OperatorNode( '*', new SplitNode( normalMap, 'xy'), scaleNode );
+			normalMap = new JoinNode( [ normalMapScale, new SplitNode( normalMap, 'z' ) ] );
+
+		}
 
 		if ( normalMapType === ObjectSpaceNormalMap ) {
 

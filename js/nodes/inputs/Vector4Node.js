@@ -1,5 +1,5 @@
 import InputNode from '../core/InputNode.js';
-import { Vector4 } from '../../../../../build/three.module.js';
+import { Vector4 } from 'three';
 
 class Vector4Node extends InputNode {
 
@@ -8,6 +8,33 @@ class Vector4Node extends InputNode {
 		super( 'vec4' );
 
 		this.value = value;
+
+	}
+
+	serialize( data ) {
+
+		super.serialize( data );
+
+		const { x, y, z, w } = this.value;
+
+		data.x = x;
+		data.y = y;
+		data.z = z;
+		data.w = w;
+
+	}
+
+	deserialize( data ) {
+
+		super.serialize( data );
+
+		const { x, y, z, w } = data;
+		const value = this.value;
+
+		value.x = x;
+		value.y = y;
+		value.z = z;
+		value.w = w;
 
 	}
 

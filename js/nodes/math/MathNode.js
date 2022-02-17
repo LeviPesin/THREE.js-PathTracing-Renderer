@@ -33,7 +33,8 @@ class MathNode extends TempNode {
 	static INVERT = 'invert';
 	static DFDX = 'dFdx';
 	static DFDY = 'dFdy';
-	static SATURATE = 'saturate'
+	static SATURATE = 'saturate';
+	static ROUND = 'round';
 
 	// 2 inputs
 
@@ -230,9 +231,25 @@ class MathNode extends TempNode {
 
 			}
 
-			return `${ builder.getMethod( method ) }( ${params.join( ', ' )} )`;
+			return builder.format( `${ builder.getMethod( method ) }( ${params.join( ', ' )} )`, type, output );
 
 		}
+
+	}
+
+	serialize( data ) {
+
+		super.serialize( data );
+
+		data.method = this.method;
+
+	}
+
+	deserialize( data ) {
+
+		super.deserialize( data );
+
+		this.method = data.method;
 
 	}
 

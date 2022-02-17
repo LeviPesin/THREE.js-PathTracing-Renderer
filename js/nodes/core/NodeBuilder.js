@@ -6,9 +6,10 @@ import NodeCode from './NodeCode.js';
 import NodeKeywords from './NodeKeywords.js';
 import { NodeUpdateType } from './constants.js';
 
-import { REVISION, LinearEncoding } from '../../../../../build/three.module.js';
+import { REVISION, LinearEncoding } from 'three';
 
-const shaderStages = [ 'fragment', 'vertex' ];
+export const shaderStages = [ 'fragment', 'vertex' ];
+export const vector = [ 'x', 'y', 'z', 'w' ];
 
 class NodeBuilder {
 
@@ -57,7 +58,8 @@ class NodeBuilder {
 			console.warn( 'Recursive node: ', node );
 
 		}
-*/
+		*/
+
 		this.stack.push( node );
 
 	}
@@ -448,25 +450,9 @@ class NodeBuilder {
 
 	}
 
-	getAttributes( shaderStage ) {
+	getAttributes( /*shaderStage*/ ) {
 
-		let snippet = '';
-
-		if ( shaderStage === 'vertex' ) {
-
-			const attributes = this.attributes;
-
-			for ( let index = 0; index < attributes.length; index ++ ) {
-
-				const attribute = attributes[ index ];
-
-				snippet += `layout(location = ${index}) in ${attribute.type} ${attribute.name}; `;
-
-			}
-
-		}
-
-		return snippet;
+		console.warn( 'Abstract function.' );
 
 	}
 
@@ -542,11 +528,31 @@ class NodeBuilder {
 
 	build() {
 
+		// stage 1: analyze nodes to possible optimization and validation
+
+		for ( const shaderStage of shaderStages ) {
+
+			this.setShaderStage( shaderStage );
+
+			const flowNodes = this.flowNodes[ shaderStage ];
+
+			for ( const node of flowNodes ) {
+
+				node.analyze( this );
+
+			}
+
+		}
+
+		// stage 2: pre-build vertex code used in fragment shader
+
 		if ( this.context.vertex && this.context.vertex.isNode ) {
 
 			this.flowNodeFromShaderStage( 'vertex', this.context.vertex );
 
 		}
+
+		// stage 3: generate shader
 
 		for ( const shaderStage of shaderStages ) {
 
@@ -563,6 +569,8 @@ class NodeBuilder {
 		}
 
 		this.setShaderStage( null );
+
+		// stage 4: build code for a specific output
 
 		this.buildCode();
 
