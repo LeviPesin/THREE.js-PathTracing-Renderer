@@ -1,4 +1,4 @@
-import VarNode from '../nodes/core/VarNode.js';
+import VarNode from 'nodes/core/VarNode.js';
 
 export default function makeVarNode(node) {
 	if (node instanceof VarNode)

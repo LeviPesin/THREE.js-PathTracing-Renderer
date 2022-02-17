@@ -1,10 +1,13 @@
 import makeVarNode from './makeVarNode.js';
 
 export class Intersection {
-	constructor({distance, point, normal}) {
+	constructor({distance, point, normal, emission, color, type}) {
 		this.distance = makeVarNode(distance);
 		this.point = makeVarNode(point);
 		this.normal = makeVarNode(normal);
+		//this.emission = makeVarNode(emission;
+		//this.color = makeVarNode(color);
+		//this.type = makeVarNode(type);
 	}
 }
 

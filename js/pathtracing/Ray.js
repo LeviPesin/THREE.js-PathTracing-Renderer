@@ -1,4 +1,4 @@
-import {Vector3} from '../three.module.js';
+import {Vector3} from 'three';
 import createConstantNode from './ConstantNode.js';
 import makeVarNode from './makeVarNode.js';
 

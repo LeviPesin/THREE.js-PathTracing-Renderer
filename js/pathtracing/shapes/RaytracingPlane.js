@@ -1,8 +1,8 @@
-import {Vector3} from '../../three.module.js';
-import SplitNode from '../../nodes/utils/SplitNode.js';
-import OperatorNode from '../../nodes/math/OperatorNode.js';
-import MathNode from '../../nodes/math/MathNode.js';
-import CondNode from '../../nodes/math/CondNode.js';
+import {Vector3} from 'three';
+import SplitNode from 'nodes/utils/SplitNode.js';
+import OperatorNode from 'nodes/math/OperatorNode.js';
+import MathNode from 'nodes/math/MathNode.js';
+import CondNode from 'nodes/math/CondNode.js';
 import makeVarNode from '../makeVarNode.js';
 import createConstantNode from '../ConstantNode.js';
 import {ZERO, INFINITY} from '../ConstantNodes.js';

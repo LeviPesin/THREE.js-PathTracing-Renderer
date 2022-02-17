@@ -1,11 +1,11 @@
 import BoolNode from './BoolNode.js';
-import FloatNode from '../nodes/inputs/FloatNode.js';
-import IntNode from '../nodes/inputs/IntNode.js';
-import Matrix3Node from '../nodes/inputs/Matrix3Node.js';
-import Matrix4Node from '../nodes/inputs/Matrix4Node.js';
-import Vector2Node from '../nodes/inputs/Vector2Node.js';
-import Vector3Node from '../nodes/inputs/Vector3Node.js';
-import Vector4Node from '../nodes/inputs/Vector4Node.js';
+import FloatNode from 'nodes/inputs/FloatNode.js';
+import IntNode from 'nodes/inputs/IntNode.js';
+import Matrix3Node from 'nodes/inputs/Matrix3Node.js';
+import Matrix4Node from 'nodes/inputs/Matrix4Node.js';
+import Vector2Node from 'nodes/inputs/Vector2Node.js';
+import Vector3Node from 'nodes/inputs/Vector3Node.js';
+import Vector4Node from 'nodes/inputs/Vector4Node.js';
 
 export default function createConstantNode(value, forceFloat = false) {
 	let node;

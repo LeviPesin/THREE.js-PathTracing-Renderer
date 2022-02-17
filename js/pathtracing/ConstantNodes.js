@@ -1,5 +1,5 @@
 import createConstantNode from './ConstantNode.js';
-import {Vector3} from '../three.module.js';
+import {Vector3} from 'three';
 
 export const ZERO     = createConstantNode(0.0, true);
 export const HALF     = createConstantNode(0.5);

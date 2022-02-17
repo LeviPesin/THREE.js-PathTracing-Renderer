@@ -1,9 +1,9 @@
 import BoolNode from './BoolNode.js';
-import IntNode from '../nodes/inputs/IntNode.js';
-import FloatNode from '../nodes/inputs/FloatNode.js';
-import Vector2Node from '../nodes/inputs/Vector2Node.js';
-import Matrix4Node from '../nodes/inputs/Matrix4Node.js';
-import TextureNode from '../nodes/inputs/TextureNode.js';
+import IntNode from 'nodes/inputs/IntNode.js';
+import FloatNode from 'nodes/inputs/FloatNode.js';
+import Vector2Node from 'nodes/inputs/Vector2Node.js';
+import Matrix4Node from 'nodes/inputs/Matrix4Node.js';
+import TextureNode from 'nodes/inputs/TextureNode.js';
 
 export const cameraIsMoving = new BoolNode();
 

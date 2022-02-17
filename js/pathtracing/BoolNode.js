@@ -1,4 +1,4 @@
-import InputNode from '../nodes/core/InputNode.js';
+import InputNode from 'nodes/core/InputNode.js';
 
 class BoolNode extends InputNode {
 

@@ -1,5 +1,5 @@
 import createConstantNode from './ConstantNode.js';
-import {Vector3} from '../three.module.js';
+import {Vector3} from 'three';
 
 export const TURBIDITY                = createConstantNode(1.0, true);
 export const RAYLEIGH_COEFFICIENT     = createConstantNode(3.0, true);
