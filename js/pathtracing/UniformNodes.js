@@ -6,13 +6,10 @@ import Matrix4Node from '../nodes/inputs/Matrix4Node.js';
 import TextureNode from '../nodes/inputs/TextureNode.js';
 
 export const cameraIsMoving = new BoolNode();
-export const sceneIsDynamic = new BoolNode();
 
-export const sampleCounter   = new IntNode();
-export const frameCounter    = new IntNode();
-export const samplesPerFrame = new IntNode();
-
-export const frameBlendingAmount = new FloatNode();
+export const sampleCounter       = new IntNode();
+export const frameCounter        = new IntNode();
+export const previousSampleCount = new IntNode();
 
 export const eps_intersect = new FloatNode();
 export const time          = new FloatNode();
