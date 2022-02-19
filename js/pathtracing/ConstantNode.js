@@ -1,4 +1,5 @@
 import BoolNode from './BoolNode.js';
+import UintNode from './UintNode.js';
 import FloatNode from 'nodes/inputs/FloatNode.js';
 import IntNode from 'nodes/inputs/IntNode.js';
 import Matrix3Node from 'nodes/inputs/Matrix3Node.js';
@@ -7,7 +8,7 @@ import Vector2Node from 'nodes/inputs/Vector2Node.js';
 import Vector3Node from 'nodes/inputs/Vector3Node.js';
 import Vector4Node from 'nodes/inputs/Vector4Node.js';
 
-export default function createConstantNode(value, forceFloat = false) {
+export default function createConstantNode(value, forceFloat = false, forceSigned = true) {
 	let node;
 	
 	if (value.isVector2 === true)
@@ -28,8 +29,10 @@ export default function createConstantNode(value, forceFloat = false) {
 		throw new TypeError('Only numbers, booleans, vectors, and matrices are allowed');
 	else if ((value % 1) || forceFloat)
 		node = new FloatNode(value);
-	else
+	else ((value < 0) || forceSigned)
 		node = new IntNode(value);
+	else
+		node = new UintNode(value);
 	
 	node.setConst(true);
 	
