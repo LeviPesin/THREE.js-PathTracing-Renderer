@@ -1,8 +1,13 @@
-import {vec3, dot, add, sub, mul, div, greaterThan, cond} from 'nodes/ShaderNode.js';
+import {float, vec3, dot, add, sub, mul, div, greaterThan, cond} from 'nodes/ShaderNode.js';
 import makeVarNode from '../makeVarNode.js';
-import {ZERO, INFINITY} from '../ConstantNodes.js';
+import {INFINITY} from '../ConstantNodes.js';
 import {Intersection, RayObjectIntersections} from '../Intersections.js';
 import RaytracingShape from '../RaytracingShape.js';
+
+const Y = vec3(0, 1, 0);
+const ZERO_VEC = vec3(0, 0, 0);
+
+const ZERO = float(0.0);
 
 export default class RaytracingPlane extends RaytracingShape {
 	constructor(obj) {
@@ -13,8 +18,8 @@ export default class RaytracingPlane extends RaytracingShape {
 			obj.normal = makeVarNode(obj.plane.xyz);
 			obj.position = makeVarNode(mul(obj.plane.w, obj.normal));
 		}
-		this.normal = makeVarNode(obj.normal || vec3(0, 1, 0));
-		this.position = makeVarNode(obj.position || vec3(0, 0, 0));
+		this.normal = makeVarNode(obj.normal || Y);
+		this.position = makeVarNode(obj.position || ZERO_VEC);
 		this.singleSided = obj.singleSided === true;
 	}
 	

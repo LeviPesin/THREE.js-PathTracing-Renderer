@@ -1,6 +1,5 @@
 import {int, float, uint, add, mul, sub, remainder, floor, shiftRight, xor, makeFloat, sqrt, join, sin, cos, dot, greaterThanEqual, cond, negate} from 'nodes/ShaderNode.js';
 import makeVarNode from './makeVarNode.js';
-import {ZERO, ONE, TWO, TWO_PI} from './ConstantNodes.js';
 import {uv} from './AttributeNodes.js';
 import {resolution, frameCounter} from './UniformNodes.js';
 
@@ -13,17 +12,22 @@ const periodCalls = 10; //after how many random() calls seed will change to the 
 
 const PRODUCT = uint(periodCalls * periodX * periodY * periodFrames);
 
-const UONE = uint(1);
+const u1 = uint(1);
+
+const f0   = float(0.0);
+const f1   = float(1.0);
+const f2   = float(2.0);
+const f2PI = float(2 * Math.PI);
 
 const ONE_OVER_MAX_UINT = float(1 / (2 ** 32 - 1));
 const ONE_OVER_POW      = float(1 / 2 ** 32);
 
-const FOUR = uint(4);
-const n22  = uint(22);
-const n28  = uint(28);
-const n27e = uint(277803737);
-const n28e = uint(2891336453);
-const n74e = uint(747796405);
+const u4   = uint(4);
+const u22  = uint(22);
+const u28  = uint(28);
+const u27e = uint(277803737);
+const u28e = uint(2891336453);
+const u74e = uint(747796405);
 
 const seed = makeVarNode(
 	makeUint(
@@ -36,13 +40,13 @@ const seed = makeVarNode(
 );
 
 function hash(num) { //taken from pcg-random.org
-	const state = makeVarNode(add(mul(num, n74e), n28e));
-	const word = makeVarNode(mul(xor(shiftRight(state, add(shiftRight(state, n28), FOUR)), state), n27e));
-	return makeVarNode(makeFloat(xor(shiftRight(word, n22), word)));
+	const state = makeVarNode(add(mul(num, u74e), u28e));
+	const word = makeVarNode(mul(xor(shiftRight(state, add(shiftRight(state, u28), u4)), state), u27e));
+	return makeVarNode(makeFloat(xor(shiftRight(word, u22), word)));
 }
 
 function getNextHash() {
-	return hash(makeVarNode(assign(seed, remainder(add(seed, UONE), PRODUCT))));
+	return hash(makeVarNode(assign(seed, remainder(add(seed, u1), PRODUCT))));
 }
 
 export default function random() { //returns a value between 0 (inclusive) and 1 (exclusive)
@@ -54,9 +58,9 @@ export default function randomInclusive() { //returns a value between 0 (inclusi
 }
 
 export default function randomDirection() { //based on https://mathworld.wolfram.com/SpherePointPicking.html
-	const u = makeVarNode(sub(mul(TWO, randomInclusive()), ONE));
-	const root = makeVarNode(sqrt(sub(ONE, mul(u, u))));
-	const theta = makeVarNode(mul(TWO_PI, random()));
+	const u = makeVarNode(sub(mul(f2, randomInclusive()), f1));
+	const root = makeVarNode(sqrt(sub(f1, mul(u, u))));
+	const theta = makeVarNode(mul(f2PI, random()));
 	return makeVarNode(join(
 		mul(root, cos(theta)),
 		mul(root, sin(theta)),
@@ -66,6 +70,6 @@ export default function randomDirection() { //based on https://mathworld.wolfram
 
 export default function randomHemisphereDirection(normal) {
 	const direction = randomDirection();
-	const condition = greaterThanEqual(dot(direction, normal), ZERO);
+	const condition = greaterThanEqual(dot(direction, normal), f0);
 	return makeVarNode(cond(condition, normal, negate(normal)));
 }

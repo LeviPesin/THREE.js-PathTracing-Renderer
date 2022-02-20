@@ -12,7 +12,7 @@ export default class RaytracingObject {
 			return this.rayIntersections.get(ray);
 		const intersections = this.shape.intersect(ray);
 		this.rayIntersections.set(ray, intersections);
-		intersections.intersections.forEach(this.calculateIntersectionsProperties.bind(this));
+		intersections.intersections = intersections.intersections.map(this.calculateIntersectionsProperties, this);
 		intersections.object = this;
 		return intersections;
 	}

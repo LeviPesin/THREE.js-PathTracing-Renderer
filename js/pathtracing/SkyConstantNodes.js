@@ -4,8 +4,6 @@ export const TURBIDITY                = float(1.0);
 export const RAYLEIGH_COEFFICIENT     = float(3.0);
 export const MIE_COEFFICIENT          = float(0.03);
 export const MIE_DIRECTIONAL_G        = float(0.76);
-//constant for atmospheric scattering
-export const THREE_OVER_SIXTEEN_PI    = float(3 / (16 * Math.PI));
 //wavelength of used primaries according to preetham
 export const LAMBDA                   = vec3(6.8E-7, 5.5E-7, 4.5E-7);
 export const TOTAL_RAYLEIGH           = vec3(5.804542996261093E-6, 1.3562911419845635E-5, 3.0265902468824876E-5);

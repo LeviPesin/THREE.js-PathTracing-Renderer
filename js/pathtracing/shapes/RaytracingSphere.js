@@ -1,17 +1,21 @@
 import {float, vec3, add, sub, mul, div, dot} from 'nodes/ShaderNode.js';
 import makeVarNode from '../makeVarNode.js';
-import {ONE, TWO} from '../ConstantNodes.js';
 import solveQuadratic from '../SolveQuadratic.js';
 import {Intersection, RayObjectIntersections} from '../Intersections.js';
 import RaytracingShape from '../RaytracingShape.js';
+
+const ONE = float(1.0);
+const TWO = float(2.0);
+
+const ZERO_VEC = vec3(0, 0, 0);
 
 export default class RaytracingSphere extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
 		super('sphere');
-		this.radius = makeVarNode(obj.radius || float(1.0));
-		this.position = makeVarNode(obj.position || vec3(0, 0, 0));
+		this.radius = makeVarNode(obj.radius || ONE);
+		this.position = makeVarNode(obj.position || ZERO_VEC);
 	}
 	
 	intersect(ray) {

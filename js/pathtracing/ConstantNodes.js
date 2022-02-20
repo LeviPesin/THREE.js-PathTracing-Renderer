@@ -1,23 +1,5 @@
 import {float, int, vec3} from 'nodes/ShaderNode.js';
 
-export const ZERO     = float(0.0);
-export const HALF     = float(0.5);
-export const NEG_HALF = float(-0.5);
-export const ONE      = float(1.0);
-export const NEG_ONE  = float(-1.0);
-export const TWO      = float(2.0);
-export const NEG_TWO  = float(-2.0);
-
-export const PI               = float(Math.PI);
-export const TWO_PI           = float(2 * Math.PI);
-export const FOUR_PI          = float(4 * Math.PI);
-export const ONE_OVER_PI      = float(1 / Math.PI);
-export const ONE_OVER_TWO_PI  = float(1 / (2 * Math.PI));
-export const ONE_OVER_FOUR_PI = float(1 / (4 * Math.PI));
-export const PI_OVER_TWO      = float(Math.PI / 2);
-export const ONE_OVER_THREE   = float(1 / 3);
-export const E                = float(Math.E);
-
 export const INFINITY      = float(1000000.0);
 export const INFINITY_VEC3 = vec3(INFINITY.value);
 

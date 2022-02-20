@@ -1,18 +1,24 @@
 import {float, vec3, lessThan, dot, negate, cond, mul, greaterThan, add} from 'nodes/ShaderNode.js';
 import makeVarNode from '../makeVarNode.js';
 import {RayObjectIntersections} from '../Intersections.js';
-import {ZERO, HALF} from '../ConstantNodes.js';
 import RaytracingShape from '../RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
+
+const ZERO = float(0.0);
+const HALF = float(1 / 2);
+const ONE = float(1.0);
+
+const Y = vec3(0, 1, 0);
+const ZERO_VEC = vec3(0, 0, 0);
 
 export default class RaytracingSlab extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
 		super('slab');
-		this.depth = makeVarNode(obj.depth || float(1.0));
-		this.normal = makeVarNode(obj.normal || vec3(0, 1, 0));
-		this.position = makeVarNode(obj.position || vec3(0, 0, 0));
+		this.depth = makeVarNode(obj.depth || ONE);
+		this.normal = makeVarNode(obj.normal || Y);
+		this.position = makeVarNode(obj.position || ZERO_VEC);
 	}
 	
 	intersect(ray) {

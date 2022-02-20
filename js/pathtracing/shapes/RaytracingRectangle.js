@@ -1,19 +1,25 @@
 import {float, vec3, mul, sub, or, greaterThan, abs, dot, cond} from 'nodes/ShaderNode.js';
 import makeVarNode from '../makeVarNode.js';
 import generateOrthonormalBasis from '../GenerateOrthonormalBasis.js';
-import {TWO, INFINITY, INFINITY_VEC3} from '../ConstantNodes.js';
+import {INFINITY, INFINITY_VEC3} from '../ConstantNodes.js';
 import RaytracingShape from '../RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
+
+const ONE = float(1.0);
+const TWO = float(2.0);
+
+const Y = vec3(0, 1, 0);
+const ZERO_VEC = vec3(0, 0, 0);
 
 export default class RaytracingRectangle extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
 		super('rectangle');
-		this.sideU = makeVarNode(obj.sideU || float(1.0));
-		this.sideV = makeVarNode(obj.sideV || float(1.0));
-		this.normal = makeVarNode(obj.normal || vec3(0, 1, 0));
-		this.position = makeVarNode(obj.position || vec3(0, 0, 0));
+		this.sideU = makeVarNode(obj.sideU || ONE);
+		this.sideV = makeVarNode(obj.sideV || ONE);
+		this.normal = makeVarNode(obj.normal || Y);
+		this.position = makeVarNode(obj.position || ZERO_VEC);
 		this.singleSided = obj.singleSided === true;
 	}
 	
