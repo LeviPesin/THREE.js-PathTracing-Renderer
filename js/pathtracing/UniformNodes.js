@@ -1,27 +1,22 @@
-import BoolNode from './BoolNode.js';
-import IntNode from 'nodes/inputs/IntNode.js';
-import FloatNode from 'nodes/inputs/FloatNode.js';
-import Vector2Node from 'nodes/inputs/Vector2Node.js';
-import Matrix4Node from 'nodes/inputs/Matrix4Node.js';
-import TextureNode from 'nodes/inputs/TextureNode.js';
+import {uniform, bool, uint, float, vec2, mat4, texture} from 'nodes/ShaderNode.js';
 
-export const cameraIsMoving = new BoolNode();
+export const cameraIsMoving = uniform(bool());
 
-export const sampleCounter       = new IntNode();
-export const frameCounter        = new IntNode();
-export const previousSampleCount = new IntNode();
+export const sampleCounter       = uniform(uint());
+export const frameCounter        = uniform(uint());
+export const previousSampleCount = uniform(uint());
 
-export const eps_intersect = new FloatNode();
-export const time          = new FloatNode();
-export const uLength       = new FloatNode();
-export const vLength       = new FloatNode();
-export const apertureSize  = new FloatNode();
-export const focusDistance = new FloatNode();
+export const eps_intersect = uniform(float());
+export const time          = uniform(float());
+export const uLength       = uniform(float());
+export const vLength       = uniform(float());
+export const apertureSize  = uniform(float());
+export const focusDistance = uniform(float());
 
-export const resolution = new Vector2Node();
-export const randomVec2 = new Vector2Node();
+export const resolution = uniform(vec2());
+export const randomVec2 = uniform(vec2());
 
-export const cameraMatrix = new Matrix4Node();
+export const cameraMatrix = uniform(mat4());
 
-export const previousTexture  = new TextureNode(null, null);
-export const blueNoiseTexture = new TextureNode(null, null);
+export const previousTexture  = uniform(texture());
+export const blueNoiseTexture = uniform(texture());

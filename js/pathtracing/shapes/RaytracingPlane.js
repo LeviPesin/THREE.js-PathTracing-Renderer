@@ -1,10 +1,5 @@
-import {Vector3} from 'three';
-import SplitNode from 'nodes/utils/SplitNode.js';
-import OperatorNode from 'nodes/math/OperatorNode.js';
-import MathNode from 'nodes/math/MathNode.js';
-import CondNode from 'nodes/math/CondNode.js';
+import {vec3, dot, add, sub, mul, div, greaterThan, cond} from 'nodes/ShaderNode.js';
 import makeVarNode from '../makeVarNode.js';
-import createConstantNode from '../ConstantNode.js';
 import {ZERO, INFINITY} from '../ConstantNodes.js';
 import {Intersection, RayObjectIntersections} from '../Intersections.js';
 import RaytracingShape from '../RaytracingShape.js';
@@ -15,25 +10,25 @@ export default class RaytracingPlane extends RaytracingShape {
 			obj = {};
 		super('plane');
 		if (obj.plane) {
-			obj.normal = makeVarNode(new SplitNode(obj.plane, 'xyz'));
-			obj.position = makeVarNode(new OperatorNode('*', new SplitNode(obj.plane, 'w'), obj.normal));
+			obj.normal = makeVarNode(obj.plane.xyz);
+			obj.position = makeVarNode(mul(obj.plane.w, obj.normal));
 		}
-		this.normal = makeVarNode(obj.normal || createConstantNode(new Vector3(0, 1, 0)));
-		this.position = makeVarNode(obj.position || createConstantNode(new Vector3(0, 0, 0)));
+		this.normal = makeVarNode(obj.normal || vec3(0, 1, 0));
+		this.position = makeVarNode(obj.position || vec3(0, 0, 0));
 		this.singleSided = obj.singleSided === true;
 	}
 	
 	intersect(ray) {
-		const denominator = makeVarNode(new MathNode(MathNode.DOT, this.normal, ray.direction));
+		const denominator = makeVarNode(dot(this.normal, ray.direction));
 		
-		const rayToPlane = new OperatorNode('-', this.position, ray.origin);
-		const result = makeVarNode(new OperatorNode('/', new MathNode(MathNode.DOT, rayToPlane, this.normal), denominator));
+		const rayToPlane = sub(this.position, ray.origin);
+		const result = makeVarNode(div(dot(rayToPlane, this.normal), denominator));
 		
-		const actualResult = new CondNode(new OperatorNode('>', result, ZERO), result, INFINITY);
+		const actualResult = cond(greaterThan(result, ZERO), result, INFINITY);
 		
 		let distance;
 		if (this.singleSided)
-			distance = new CondNode(new OperatorNode('>', denominator, ZERO), INFINITY, actualResult);
+			distance = cond(greaterThan(denominator, ZERO), INFINITY, actualResult);
 		else
 			distance = actualResult;
 		
@@ -41,7 +36,7 @@ export default class RaytracingPlane extends RaytracingShape {
 		
 		const intersection = new Intersection({
 			distance,
-			point: new OperatorNode('+', ray.origin, new OperatorNode('*', distance, ray.direction)),
+			point: add(ray.origin, mul(distance, ray.direction)),
 			normal: this.normal
 		});
 		

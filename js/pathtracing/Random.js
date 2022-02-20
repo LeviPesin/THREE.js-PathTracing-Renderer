@@ -1,91 +1,71 @@
-import OperatorNode from 'nodes/math/OperatorNode.js';
-import MathNode from 'nodes/math/MathNode.js';
-import CondNode from 'nodes/math/CondNode.js';
-import SplitNode from 'nodes/utils/SplitNode.js';
-import JoinNode from 'nodes/utils/JoinNode.js';
-import createConstantNode from './ConstantNode.js';
+import {int, float, uint, add, mul, sub, remainder, floor, shiftRight, xor, makeFloat, sqrt, join, sin, cos, dot, greaterThanEqual, cond, negate} from 'nodes/ShaderNode.js';
 import makeVarNode from './makeVarNode.js';
 import {ZERO, ONE, TWO, TWO_PI} from './ConstantNodes.js';
 import {uv} from './AttributeNodes.js';
 import {resolution, frameCounter} from './UniformNodes.js';
 
-const INTEGER_ONE = createConstantNode(1);
+const periodX = 50; //after how many X pixels the starting seed will loop
+const periodY = 25; //after how many Y pixels the starting seed will loop
+const periodFrames = 20; //after how many frames the starting seed will loop
+const periodCalls = 10; //after how many random() calls seed will change to the next possible starting seed
+//these variables are configurable
+//their product is the number of possible seeds
 
-const ONE_OVER_MAX_UINT = createConstantNode(1 / (2 ** 32 - 1));
-const ONE_OVER_POW      = createConstantNode(1 / 2 ** 32);
+const PRODUCT = uint(periodCalls * periodX * periodY * periodFrames);
 
-const FIVE   = createConstantNode(5);
-const TWENTY = createConstantNode(20);
-const FIFTY  = createConstantNode(50);
-const n250   = createConstantNode(250);
-const n12500 = createConstantNode(12500);
+const UONE = uint(1);
 
-const FOUR = createConstantNode(4,          false, false);
-const n22  = createConstantNode(22,         false, false);
-const n28  = createConstantNode(28,         false, false);
-const n27e = createConstantNode(277803737,  false, false);
-const n28e = createConstantNode(2891336453, false, false);
-const n74e = createConstantNode(747796405,  false, false);
+const ONE_OVER_MAX_UINT = float(1 / (2 ** 32 - 1));
+const ONE_OVER_POW      = float(1 / 2 ** 32);
 
-const seed = makeVarNode(new OperatorNode('+',
-	new OperatorNode('+',
-		new OperatorNode('*', n12500, new OperatorNode('%', frameCounter, TWENTY)),
-		new OperatorNode('*', n250, new OperatorNode('%',
-			new MathNode(MathNode.FLOOR, new OperatorNode('*', new SplitNode(uv, 'x'), new SplitNode(resolution, 'x'))),
-			FIFTY
-		))
-	),
-	new OperatorNode('*', FIVE, new OperatorNode('%',
-		new MathNode(MathNode.FLOOR, new OperatorNode('*', new SplitNode(uv, 'y'), new SplitNode(resolution, 'y'))),
-		FIFTY
-	))
-));
+const FOUR = uint(4);
+const n22  = uint(22);
+const n28  = uint(28);
+const n27e = uint(277803737);
+const n28e = uint(2891336453);
+const n74e = uint(747796405);
+
+const seed = makeVarNode(
+	makeUint(
+		add(
+			mul(int(periodCalls * periodX * periodY), remainder(frameCounter,                   int(periodFrames))),
+			mul(int(periodCalls * periodY),           remainder(floor(mul(uv.x, resolution.x)), int(periodX))),
+			mul(int(periodCalls),                     remainder(floor(mul(uv.y, resolution.y)), int(periodY))),
+		)
+	)
+);
 
 function hash(num) { //taken from pcg-random.org
-	const state = makeVarNode(new OperatorNode('+', new OperatorNode('*', num, n74e), n28e));
-	const word = makeVarNode(new OperatorNode('*',
-		new OperatorNode('^',
-			new OperatorNode('>>',
-				state,
-				new OperatorNode('+', new OperatorNode('>>', state, n28), FOUR)
-			),
-			state
-		),
-		n27e
-	));
-	return makeVarNode(
-		new MathNode('float', new OperatorNode('^',
-			new OperatorNode('>>', word, n22),
-			word
-		)
-	);
+	const state = makeVarNode(add(mul(num, n74e), n28e));
+	const word = makeVarNode(mul(xor(shiftRight(state, add(shiftRight(state, n28), FOUR)), state), n27e));
+	return makeVarNode(makeFloat(xor(shiftRight(word, n22), word)));
 }
 
 function getNextHash() {
-	return hash(makeVarNode(new OperatorNode('=', seed, new OperatorNode('+', seed, INTEGER_ONE))));
+	return hash(makeVarNode(assign(seed, remainder(add(seed, UONE), PRODUCT))));
 }
 
 export default function random() { //returns a value between 0 (inclusive) and 1 (exclusive)
-	return new OperatorNode('/', getNextHash(), ONE_OVER_POW);
+	return makeVarNode(mul(getNextHash(), ONE_OVER_POW));
 }
 
 export default function randomInclusive() { //returns a value between 0 (inclusive) and 1 (inclusive)
-	return new OperatorNode('/', getNextHash(), ONE_OVER_MAX_UINT);
+	return makeVarNode(mul(getNextHash(), ONE_OVER_MAX_UINT));
 }
 
 export default function randomDirection() { //based on https://mathworld.wolfram.com/SpherePointPicking.html
-	const u = makeVarNode(new OperatorNode('-', new OperatorNode('*', TWO, randomInclusive()), ONE));
-	const root = makeVarNode(new MathNode(MathNode.SQRT, new OperatorNode('-', ONE, new OperatorNode('*', u, u))));
-	const theta = makeVarNode(new OperatorNode('*', TWO_PI, random()));
-	return makeVarNode(new JoinNode([
-		new OperatorNode('*', root, new MathNode(MathNode.COS, theta)),
-		new OperatorNode('*', root, new MathNode(MathNode.SIN, theta)),
+	const u = makeVarNode(sub(mul(TWO, randomInclusive()), ONE));
+	const root = makeVarNode(sqrt(sub(ONE, mul(u, u))));
+	const theta = makeVarNode(mul(TWO_PI, random()));
+	return makeVarNode(join(
+		mul(root, cos(theta)),
+		mul(root, sin(theta)),
 		u
-	]));
+	));
 }
 
 export default function randomHemisphereDirection(normal) {
 	const direction = randomDirection();
-	const cond = new OperatorNode('>=', new MathNode(MathNode.DOT, direction, normal), ZERO);
-	return makeVarNode(new CondNode(cond, normal, new MathNode(MathNode.NEGATE, normal)));
+	const condition = greaterThanEqual(dot(direction, normal), ZERO);
+	return makeVarNode(cond(condition, normal, negate(normal)));
 }
