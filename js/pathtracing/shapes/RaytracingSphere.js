@@ -1,8 +1,7 @@
-import {float, vec3, add, sub, mul, div, dot} from 'nodes/ShaderNode.js';
-import makeVarNode from '../makeVarNode.js';
-import solveQuadratic from '../SolveQuadratic.js';
-import {Intersection, RayObjectIntersections} from '../Intersections.js';
-import RaytracingShape from '../RaytracingShape.js';
+import {float, vec3, makeVar, add, sub, mul, div, dot} from 'nodes/ShaderNode.js';
+import solveQuadratic from '../utils/SolveQuadratic.js';
+import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
+import RaytracingShape from '../core/RaytracingShape.js';
 
 const ONE = float(1.0);
 const TWO = float(2.0);
@@ -14,23 +13,23 @@ export default class RaytracingSphere extends RaytracingShape {
 		if (!obj)
 			obj = {};
 		super('sphere');
-		this.radius = makeVarNode(obj.radius || ONE);
-		this.position = makeVarNode(obj.position || ZERO_VEC);
+		this.radius = makeVar(obj.radius || ONE);
+		this.position = makeVar(obj.position || ZERO_VEC);
 	}
 	
 	intersect(ray) {
-		const sphereToRay = makeVarNode(sub(ray.origin, this.position));
+		const sphereToRay = makeVar(sub(ray.origin, this.position));
 	
-		const a = makeVarNode(dot(ray.direction, ray.direction));
-		const b = makeVarNode(mul(TWO, dot(ray.direction, sphereToRay)));
-		const c = makeVarNode(sub(dot(sphereToRay, sphereToRay), mul(this.radius, this.radius)));
+		const a = makeVar(dot(ray.direction, ray.direction));
+		const b = makeVar(mul(TWO, dot(ray.direction, sphereToRay)));
+		const c = makeVar(sub(dot(sphereToRay, sphereToRay), mul(this.radius, this.radius)));
 		
 		const {minRoot, maxRoot} = solveQuadratic(a, b, c);
 		
-		const point1 = makeVarNode(add(ray.origin, mul(minRoot, ray.direction)));
-		const point2 = makeVarNode(add(ray.origin, mul(maxRoot, ray.direction)));
+		const point1 = makeVar(add(ray.origin, mul(minRoot, ray.direction)));
+		const point2 = makeVar(add(ray.origin, mul(maxRoot, ray.direction)));
 		
-		const normalCoeff = makeVarNode(div(ONE, this.radius));
+		const normalCoeff = makeVar(div(ONE, this.radius));
 		
 		const intersection1 = new Intersection({
 			distance: minRoot,

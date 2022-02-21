@@ -1,8 +1,7 @@
-import {float, vec3, dot, add, sub, mul, div, greaterThan, cond} from 'nodes/ShaderNode.js';
-import makeVarNode from '../makeVarNode.js';
-import {INFINITY} from '../ConstantNodes.js';
-import {Intersection, RayObjectIntersections} from '../Intersections.js';
-import RaytracingShape from '../RaytracingShape.js';
+import {float, vec3, makeVar, dot, add, sub, mul, div, greaterThan, cond} from 'nodes/ShaderNode.js';
+import {INFINITY} from '../constants/ConstantNodes.js';
+import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
+import RaytracingShape from '../core/RaytracingShape.js';
 
 const Y = vec3(0, 1, 0);
 const ZERO_VEC = vec3(0, 0, 0);
@@ -15,19 +14,19 @@ export default class RaytracingPlane extends RaytracingShape {
 			obj = {};
 		super('plane');
 		if (obj.plane) {
-			obj.normal = makeVarNode(obj.plane.xyz);
-			obj.position = makeVarNode(mul(obj.plane.w, obj.normal));
+			obj.normal = makeVar(obj.plane.xyz);
+			obj.position = makeVar(mul(obj.plane.w, obj.normal));
 		}
-		this.normal = makeVarNode(obj.normal || Y);
-		this.position = makeVarNode(obj.position || ZERO_VEC);
+		this.normal = makeVar(obj.normal || Y);
+		this.position = makeVar(obj.position || ZERO_VEC);
 		this.singleSided = obj.singleSided === true;
 	}
 	
 	intersect(ray) {
-		const denominator = makeVarNode(dot(this.normal, ray.direction));
+		const denominator = makeVar(dot(this.normal, ray.direction));
 		
 		const rayToPlane = sub(this.position, ray.origin);
-		const result = makeVarNode(div(dot(rayToPlane, this.normal), denominator));
+		const result = makeVar(div(dot(rayToPlane, this.normal), denominator));
 		
 		const actualResult = cond(greaterThan(result, ZERO), result, INFINITY);
 		
@@ -37,7 +36,7 @@ export default class RaytracingPlane extends RaytracingShape {
 		else
 			distance = actualResult;
 		
-		distance = makeVarNode(distance);
+		distance = makeVar(distance);
 		
 		const intersection = new Intersection({
 			distance,

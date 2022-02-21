@@ -1,8 +1,7 @@
-import {float, vec3, mul, sub, or, greaterThan, abs, dot, cond} from 'nodes/ShaderNode.js';
-import makeVarNode from '../makeVarNode.js';
-import generateOrthonormalBasis from '../GenerateOrthonormalBasis.js';
-import {INFINITY, INFINITY_VEC3} from '../ConstantNodes.js';
-import RaytracingShape from '../RaytracingShape.js';
+import {float, vec3, makeVar, mul, sub, or, greaterThan, abs, dot, cond} from 'nodes/ShaderNode.js';
+import generateOrthonormalBasis from '../utils/GenerateOrthonormalBasis.js';
+import {INFINITY, INFINITY_VEC3} from '../constants/ConstantNodes.js';
+import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
 const ONE = float(1.0);
@@ -16,17 +15,17 @@ export default class RaytracingRectangle extends RaytracingShape {
 		if (!obj)
 			obj = {};
 		super('rectangle');
-		this.sideU = makeVarNode(obj.sideU || ONE);
-		this.sideV = makeVarNode(obj.sideV || ONE);
-		this.normal = makeVarNode(obj.normal || Y);
-		this.position = makeVarNode(obj.position || ZERO_VEC);
+		this.sideU = makeVar(obj.sideU || ONE);
+		this.sideV = makeVar(obj.sideV || ONE);
+		this.normal = makeVar(obj.normal || Y);
+		this.position = makeVar(obj.position || ZERO_VEC);
 		this.singleSided = obj.singleSided === true;
 	}
 	
 	intersect(ray) {
 		const intersections = RaytracingPlane.prototype.intersect.call(this, ray);
 		
-		const distanceVector = makeVarNode(mul(TWO, sub(intersections.intersections[0].point, this.position)));
+		const distanceVector = makeVar(mul(TWO, sub(intersections.intersections[0].point, this.position)));
 		
 		const [_, U, V] = generateOrthonormalBasis(this.normal);
 		

@@ -1,13 +1,13 @@
-import makeVarNode from './makeVarNode.js';
+import {makeVar} from 'nodes/ShaderNode.js';
 
 export class Intersection {
 	constructor({distance, point, normal, emission, color, type}) {
-		this.distance = makeVarNode(distance);
-		this.point = makeVarNode(point);
-		this.normal = makeVarNode(normal);
-		//this.emission = makeVarNode(emission;
-		//this.color = makeVarNode(color);
-		//this.type = makeVarNode(type);
+		this.distance = makeVar(distance);
+		this.point = makeVar(point);
+		this.normal = makeVar(normal);
+		//this.emission = makeVar(emission;
+		//this.color = makeVar(color);
+		//this.type = makeVar(type);
 	}
 }
 
