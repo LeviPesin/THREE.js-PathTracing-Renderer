@@ -1,4 +1,4 @@
-import {float, vec3, makeVar, add, sub, mul, div, dot} from 'nodes/ShaderNode.js';
+import {float, vec3, makeVar, add, sub, mul, div, dot} from 'three-nodes/ShaderNode.js';
 import solveQuadratic from '../utils/SolveQuadratic.js';
 import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';

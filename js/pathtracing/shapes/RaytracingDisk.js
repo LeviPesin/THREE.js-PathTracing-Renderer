@@ -1,4 +1,4 @@
-import {float, vec3, makeVar, sub, dot, mul, greaterThan, cond} from 'nodes/ShaderNode.js';
+import {float, vec3, makeVar, sub, dot, mul, greaterThan, cond} from 'three-nodes/ShaderNode.js';
 import {INFINITY, INFINITY_VEC3} from '../constants/ConstantNodes.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';

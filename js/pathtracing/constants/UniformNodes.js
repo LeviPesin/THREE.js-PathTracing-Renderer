@@ -1,4 +1,4 @@
-import {uniform, bool, uint, float, vec2, mat4, texture} from 'nodes/ShaderNode.js';
+import {uniform, bool, uint, float, vec2, mat4, texture} from 'three-nodes/ShaderNode.js';
 
 export const cameraIsMoving = uniform(bool());
 

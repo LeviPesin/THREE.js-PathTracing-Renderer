@@ -1,4 +1,4 @@
-import {float, int, vec3} from 'nodes/ShaderNode.js';
+import {float, int, vec3} from 'three-nodes/ShaderNode.js';
 
 export const INFINITY      = float(1000000.0);
 export const INFINITY_VEC3 = vec3(INFINITY.value);

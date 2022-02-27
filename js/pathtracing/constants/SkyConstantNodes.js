@@ -1,4 +1,4 @@
-import {float, vec3} from 'nodes/ShaderNode.js';
+import {float, vec3} from 'three-nodes/ShaderNode.js';
 
 export const TURBIDITY                = float(1.0);
 export const RAYLEIGH_COEFFICIENT     = float(3.0);

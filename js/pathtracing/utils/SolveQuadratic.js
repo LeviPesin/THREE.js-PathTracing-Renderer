@@ -1,4 +1,4 @@
-import {float, makeVar, add, sub, mul, div, lessThan, sqrt, cond} from 'nodes/ShaderNode.js';
+import {float, makeVar, add, sub, mul, div, lessThan, sqrt, cond} from 'three-nodes/ShaderNode.js';
 import {INFINITY} from '../constants/ConstantNodes.js';
 
 const ZERO = float(0.0);

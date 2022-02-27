@@ -1,4 +1,4 @@
-import {vec3, makeVar} from 'nodes/ShaderNode.js';
+import {vec3, makeVar} from 'three-nodes/ShaderNode.js';
 
 const ZERO = vec3(0, 0, 0);
 const Z = vec3(0, 0, 1);

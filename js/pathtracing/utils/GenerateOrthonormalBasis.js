@@ -1,4 +1,4 @@
-import {float, vec3, cond, lessThan, abs, makeVar, normalize, cross} from 'nodes/ShaderNode.js';
+import {float, vec3, cond, lessThan, abs, makeVar, normalize, cross} from 'three-nodes/ShaderNode.js';
 
 const ZERO_POINT_NINE = float(0.9);
 

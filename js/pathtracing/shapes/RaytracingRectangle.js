@@ -1,4 +1,4 @@
-import {float, vec3, makeVar, mul, sub, or, greaterThan, abs, dot, cond} from 'nodes/ShaderNode.js';
+import {float, vec3, makeVar, mul, sub, or, greaterThan, abs, dot, cond} from 'three-nodes/ShaderNode.js';
 import generateOrthonormalBasis from '../utils/GenerateOrthonormalBasis.js';
 import {INFINITY, INFINITY_VEC3} from '../constants/ConstantNodes.js';
 import RaytracingShape from '../core/RaytracingShape.js';
