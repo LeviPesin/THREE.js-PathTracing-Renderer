@@ -1,4 +1,4 @@
-import {float, vec3, makeVar, lessThan, dot, negate, cond, mul, greaterThan, add} from 'three-nodes/ShaderNode.js';
+import {float, vec3, temp, lessThan, dot, negate, cond, mul, greaterThan, add} from 'three-nodes/ShaderNode.js';
 import {RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
@@ -15,33 +15,33 @@ export default class RaytracingSlab extends RaytracingShape {
 		if (!obj)
 			obj = {};
 		super('slab');
-		this.depth = makeVar(obj.depth || ONE);
-		this.normal = makeVar(obj.normal || Y);
-		this.position = makeVar(obj.position || ZERO_VEC);
+		this.depth = temp(obj.depth || ONE);
+		this.normal = temp(obj.normal || Y);
+		this.position = temp(obj.position || ZERO_VEC);
 	}
 	
 	intersect(ray) {
-		const condition = makeVar(lessThan(dot(this.normal, ray.direction), ZERO));
-		const negNormal = makeVar(negate(this.normal));
+		const condition = temp(lessThan(dot(this.normal, ray.direction), ZERO));
+		const negNormal = temp(negate(this.normal));
 		
-		const normal1 = makeVar(cond(condition, this.normal, negNormal));
-		const normal2 = makeVar(cond(condition, negNormal, this.normal));
+		const normal1 = temp(cond(condition, this.normal, negNormal));
+		const normal2 = temp(cond(condition, negNormal, this.normal));
 		
-		const radius = makeVar(mul(this.depth, HALF));
-		const trueRadius = makeVar(cond(
+		const radius = temp(mul(this.depth, HALF));
+		const trueRadius = temp(cond(
 			greaterThan(dot(sub(ray.origin, this.position), this.normal), radius),
 			radius,
 			negate(radius)
 		));
 		
 		const intersection1 = RaytracingPlane.prototype.intersect.call({
-			position: makeVar(add(this.position, mul(trueRadius, normal1))),
+			position: temp(add(this.position, mul(trueRadius, normal1))),
 			normal: normal1,
 			singleSided: false
 		}, ray).intersections[0];
 		
 		const intersection2 = RaytracingPlane.prototype.intersect.call({
-			position: makeVar(add(this.position, mul(trueRadius, normal2))),
+			position: temp(add(this.position, mul(trueRadius, normal2))),
 			normal: normal2,
 			singleSided: false
 		}, ray).intersections[0];

@@ -15,7 +15,7 @@ import {
 import {
 	texture,
 	element,
-	makeVar,
+	temp,
 	add,
 	div,
 	remainder,
@@ -109,7 +109,7 @@ export default class WebGLTypedBuffer extends TypedBuffer {
 		const arr = [];
 		for (let ind = 0; ind < this.elementSize; ind++)
 			arr.push(getTextureElement(this._buffer, add(start, getFloat(ind)), this._width, this._height));
-		return makeVar(this._function(...arr));
+		return temp(this._function(...arr));
 	}
 	
 	setBufferElement(i, value) {

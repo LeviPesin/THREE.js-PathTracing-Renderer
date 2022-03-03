@@ -1,5 +1,5 @@
 import {Camera, Mesh, PlaneGeometry, Scene, WebGLRenderTarget} from 'three';
-import {int, vec2, makeVar, pixel, add, mul} from 'three-nodes/ShaderNode.js';
+import {int, vec2, temp, pixel, add, mul} from 'three-nodes/ShaderNode.js';
 import MeshBasicNodeMaterial from 'three-nodes/materials/MeshBasicNodeMaterial.js';
 import {} from 'three-webgl/nodes/WebGLNodes.js';
 import WebGLTypedBuffer from './WebGLTypedBuffer.js';
@@ -26,8 +26,8 @@ export default class WebGLComputationRenderer {
 		this._renderTarget = new WebGLRenderTarget(outBuffer.width, outBuffer.height, {depthBuffer: false});
 		this._renderTarget.texture = outBuffer;
 		
-		const pixelNode = makeVar(pixel(vec2(outBuffer.width, outBuffer.height)));
-		const index = makeVar(add(mul(int(pixelNode.y), int(outBuffer.width)), int(pixelNode.x)));
+		const pixelNode = temp(pixel(vec2(outBuffer.width, outBuffer.height)));
+		const index = temp(add(mul(int(pixelNode.y), int(outBuffer.width)), int(pixelNode.x)));
 		const shaderParams = {index, element: srcBuffer.getBufferElement(index), buffer: srcBuffer};
 		this._material.colorNode = outBuffer.setBufferElement(index, this.shaderNode(shaderParams));
 	}

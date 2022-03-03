@@ -1,4 +1,4 @@
-import {ShaderNode, int, float, uint, makeVar, pixel, add, mul, sub, remainder, floor, shiftRight, bitXor, sqrt, join, sin, cos, dot, greaterThanEqual, cond, negate} from 'three-nodes/ShaderNode.js';
+import {ShaderNode, int, float, uint, temp, pixel, add, mul, sub, remainder, floor, shiftRight, bitXor, sqrt, join, sin, cos, dot, greaterThanEqual, cond, negate} from 'three-nodes/ShaderNode.js';
 import WebGLComputationRenderer from './WebGLComputationalRenderer.js';
 import WebGPUComputationRenderer from './WebGPUComputationalRenderer.js';
 import {resolution, frameCounter} from '../constants/UniformNodes.js';
@@ -13,8 +13,8 @@ const u28e = uint(2891336453);
 const u74e = uint(747796405);
 
 function hash(num) { //taken from pcg-random.org
-	const state = makeVar(add(mul(num, u74e), u28e));
-	const word = makeVar(mul(bitXor(shiftRight(state, add(shiftRight(state, u28), u4)), state), u27e));
+	const state = temp(add(mul(num, u74e), u28e));
+	const word = temp(mul(bitXor(shiftRight(state, add(shiftRight(state, u28), u4)), state), u27e));
 	return bitXor(shiftRight(word, u22), word);
 }
 
@@ -39,8 +39,8 @@ function generateRandomBuffer(renderer) {
 }
 
 function generateSeed() {
-	const pix = makeVar(pixel(resolution));
-	seed = makeVar(
+	const pix = temp(pixel(resolution));
+	seed = temp(
 		uint(
 			add(
 				mul(int(periodCalls * periodX * periodY), remainder(frameCounter, int(periodFrames))),
@@ -71,7 +71,7 @@ export function init(options) {
 		generateRandomBuffer(renderer);
 		getHash = buffer.getBufferElement.bind(buffer);
 	} else
-		getHash = num => makeVar(float(hash(num)));
+		getHash = num => temp(float(hash(num)));
 	
 	seed = generateSeed();
 }
@@ -79,18 +79,18 @@ export function init(options) {
 const u1 = uint(1);
 
 function getNextHash() {
-	return getHash(makeVar(assign(seed, remainder(add(seed, u1), uPRODUCT))));
+	return getHash(temp(assign(seed, remainder(add(seed, u1), uPRODUCT))));
 }
 
 const ONE_OVER_MAX_UINT = float(1 / (2 ** 32 - 1));
 const ONE_OVER_POW      = float(1 / 2 ** 32);
 
 export function random() { //returns a value between 0 (inclusive) and 1 (exclusive)
-	return makeVar(mul(getNextHash(), ONE_OVER_POW));
+	return temp(mul(getNextHash(), ONE_OVER_POW));
 }
 
 export function randomInclusive() { //returns a value between 0 (inclusive) and 1 (inclusive)
-	return makeVar(mul(getNextHash(), ONE_OVER_MAX_UINT));
+	return temp(mul(getNextHash(), ONE_OVER_MAX_UINT));
 }
 
 const f0   = float(0.0);
@@ -99,14 +99,14 @@ const f2   = float(2.0);
 const f2PI = float(2 * Math.PI);
 
 export function randomDirection() { //based on https://mathworld.wolfram.com/SpherePointPicking.html
-	const u = makeVar(sub(mul(f2, randomInclusive()), f1));
-	const root = makeVar(sqrt(sub(f1, mul(u, u))));
-	const theta = makeVar(mul(f2PI, random()));
-	return makeVar(join(mul(root, cos(theta)), mul(root, sin(theta)), u));
+	const u = temp(sub(mul(f2, randomInclusive()), f1));
+	const root = temp(sqrt(sub(f1, mul(u, u))));
+	const theta = temp(mul(f2PI, random()));
+	return temp(join(mul(root, cos(theta)), mul(root, sin(theta)), u));
 }
 
 export function randomHemisphereDirection(normal) {
 	const direction = randomDirection();
 	const condition = greaterThanEqual(dot(direction, normal), f0);
-	return makeVar(cond(condition, normal, negate(normal)));
+	return temp(cond(condition, normal, negate(normal)));
 }

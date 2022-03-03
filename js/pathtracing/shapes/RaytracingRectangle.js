@@ -1,4 +1,4 @@
-import {float, vec3, makeVar, mul, sub, or, greaterThan, abs, dot, cond} from 'three-nodes/ShaderNode.js';
+import {float, vec3, temp, mul, sub, or, greaterThan, abs, dot, cond} from 'three-nodes/ShaderNode.js';
 import generateOrthonormalBasis from '../utils/GenerateOrthonormalBasis.js';
 import {INFINITY, INFINITY_VEC3} from '../constants/ConstantNodes.js';
 import RaytracingShape from '../core/RaytracingShape.js';
@@ -15,17 +15,17 @@ export default class RaytracingRectangle extends RaytracingShape {
 		if (!obj)
 			obj = {};
 		super('rectangle');
-		this.sideU = makeVar(obj.sideU || ONE);
-		this.sideV = makeVar(obj.sideV || ONE);
-		this.normal = makeVar(obj.normal || Y);
-		this.position = makeVar(obj.position || ZERO_VEC);
+		this.sideU = temp(obj.sideU || ONE);
+		this.sideV = temp(obj.sideV || ONE);
+		this.normal = temp(obj.normal || Y);
+		this.position = temp(obj.position || ZERO_VEC);
 		this.singleSided = obj.singleSided === true;
 	}
 	
 	intersect(ray) {
 		const intersections = RaytracingPlane.prototype.intersect.call(this, ray);
 		
-		const distanceVector = makeVar(mul(TWO, sub(intersections.intersections[0].point, this.position)));
+		const distanceVector = temp(mul(TWO, sub(intersections.intersections[0].point, this.position)));
 		
 		const [_, U, V] = generateOrthonormalBasis(this.normal);
 		

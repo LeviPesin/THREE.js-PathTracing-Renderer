@@ -10,7 +10,7 @@ export default class WebGPUTypedBuffer extends TypedBuffer {
 	}
 	
 	getBufferElement(i) {
-		return makeVar(element(this._buffer, i));
+		return temp(element(this._buffer, i));
 	}
 	
 	setBufferElement(i, value) {
