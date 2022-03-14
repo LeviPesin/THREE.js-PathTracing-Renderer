@@ -3,31 +3,24 @@ import {RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
-const ZERO = float(0.0);
-const HALF = float(1 / 2);
-const ONE = float(1.0);
-
-const Y = vec3(0, 1, 0);
-const ZERO_VEC = vec3(0, 0, 0);
-
 export default class RaytracingSlab extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
 		super('slab');
-		this.depth = temp(obj.depth || ONE);
-		this.normal = temp(obj.normal || Y);
-		this.position = temp(obj.position || ZERO_VEC);
+		this.depth = temp(obj.depth || 1.0);
+		this.normal = temp(obj.normal || vec3(0, 1, 0));
+		this.position = temp(obj.position || vec3(0, 0, 0));
 	}
 	
 	intersect(ray) {
-		const condition = temp(lessThan(dot(this.normal, ray.direction), ZERO));
+		const condition = temp(lessThan(dot(this.normal, ray.direction), 0));
 		const negNormal = temp(negate(this.normal));
 		
 		const normal1 = temp(cond(condition, this.normal, negNormal));
 		const normal2 = temp(cond(condition, negNormal, this.normal));
 		
-		const radius = temp(mul(this.depth, HALF));
+		const radius = temp(mul(this.depth, 0.5));
 		const trueRadius = temp(cond(
 			greaterThan(dot(sub(ray.origin, this.position), this.normal), radius),
 			radius,

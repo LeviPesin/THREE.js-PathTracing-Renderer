@@ -3,11 +3,6 @@ import {INFINITY} from '../constants/ConstantNodes.js';
 import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 
-const Y = vec3(0, 1, 0);
-const ZERO_VEC = vec3(0, 0, 0);
-
-const ZERO = float(0.0);
-
 export default class RaytracingPlane extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
@@ -17,8 +12,8 @@ export default class RaytracingPlane extends RaytracingShape {
 			obj.normal = temp(obj.plane.xyz);
 			obj.position = temp(mul(obj.plane.w, obj.normal));
 		}
-		this.normal = temp(obj.normal || Y);
-		this.position = temp(obj.position || ZERO_VEC);
+		this.normal = temp(obj.normal || vec3(0, 1, 0));
+		this.position = temp(obj.position || vec3(0, 0, 0));
 		this.singleSided = obj.singleSided === true;
 	}
 	
@@ -28,11 +23,11 @@ export default class RaytracingPlane extends RaytracingShape {
 		const rayToPlane = sub(this.position, ray.origin);
 		const result = temp(div(dot(rayToPlane, this.normal), denominator));
 		
-		const actualResult = cond(greaterThan(result, ZERO), result, INFINITY);
+		const actualResult = cond(greaterThan(result, 0), result, INFINITY);
 		
 		let distance;
 		if (this.singleSided)
-			distance = cond(greaterThan(denominator, ZERO), INFINITY, actualResult);
+			distance = cond(greaterThan(denominator, 0), INFINITY, actualResult);
 		else
 			distance = actualResult;
 		

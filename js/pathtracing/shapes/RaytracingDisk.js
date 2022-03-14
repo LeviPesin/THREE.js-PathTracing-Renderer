@@ -3,19 +3,14 @@ import {INFINITY, INFINITY_VEC3} from '../constants/ConstantNodes.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
-const ONE = float(1.0);
-
-const Y = vec3(0, 1, 0);
-const ZERO_VEC = vec3(0, 0, 0);
-
 export default class RaytracingDisk extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
 		super('disk');
-		this.radius = temp(obj.radius || ONE);
-		this.normal = temp(obj.normal || Y);
-		this.position = temp(obj.position || ZERO_VEC);
+		this.radius = temp(obj.radius || 1.0);
+		this.normal = temp(obj.normal || vec3(0, 1, 0));
+		this.position = temp(obj.position || vec3(0, 0, 0));
 		this.singleSided = obj.singleSided === true;
 	}
 	

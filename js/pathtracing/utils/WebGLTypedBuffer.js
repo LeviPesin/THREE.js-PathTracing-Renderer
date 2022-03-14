@@ -28,21 +28,11 @@ import {
 } from 'three-nodes/ShaderNode.js';
 import TypedBuffer from './TypedBuffer.js';
 
-const ZERO = int(0);
-
-const floatMap = new Map();
-
-function getFloat(num) {
-	if (!floatMap.has(num))
-		floatMap.set(num, float(num));
-	return floatMap.get(num);
-}
-
 function getTextureElement(dataTexture, i, width, height) {
-	const x = div(add(float(remainder(i, width)), getFloat(0.5)), width);
-	const y = div(add(floor(div      (i, width)), getFloat(0.5)), height);
+	const x = div(add(float(remainder(i, width)), 0.5), width);
+	const y = div(add(floor(div      (i, width)), 0.5), height);
 	
-	return element(texture(dataTexture, vec2(x, y)), ZERO);
+	return texture(dataTexture, vec2(x, y))[0];
 }
 
 export default class WebGLTypedBuffer extends TypedBuffer {
@@ -89,8 +79,8 @@ export default class WebGLTypedBuffer extends TypedBuffer {
 		this._buffer.wrapS = this._buffer.wrapT = RepeatWrapping; //prevent from resizing if width or height is not a power of 2
 		this._buffer.needsUpdate = true;
 		
-		this._width = getFloat(width);
-		this._height = getFloat(height);
+		this._width = width;
+		this._height = height;
 		
 		if (this.elementSize === 1)
 			this._function = (functionType === 'unsigned') ? uint : (functionType === 'signed') ? int : float;
@@ -100,15 +90,13 @@ export default class WebGLTypedBuffer extends TypedBuffer {
 			this._function = (functionType === 'unsigned') ? uvec3 : (functionType === 'signed') ? ivec3 : vec3;
 		else if (this.elementSize === 4)
 			this._function = (functionType === 'unsigned') ? uvec4 : (functionType === 'signed') ? ivec4 : vec4;
-		
-		this._elementSizeNode = getFloat(this.elementSize);
 	}
 	
 	getBufferElement(i) {
-		const start = mul(float(i), this._elementSizeNode);
+		const start = mul(float(i), this.elementSize);
 		const arr = [];
 		for (let ind = 0; ind < this.elementSize; ind++)
-			arr.push(getTextureElement(this._buffer, add(start, getFloat(ind)), this._width, this._height));
+			arr.push(getTextureElement(this._buffer, add(start, ind), this._width, this._height));
 		return temp(this._function(...arr));
 	}
 	

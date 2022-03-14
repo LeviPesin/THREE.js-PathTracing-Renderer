@@ -4,28 +4,22 @@ import {INFINITY, INFINITY_VEC3} from '../constants/ConstantNodes.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
-const ONE = float(1.0);
-const TWO = float(2.0);
-
-const Y = vec3(0, 1, 0);
-const ZERO_VEC = vec3(0, 0, 0);
-
 export default class RaytracingRectangle extends RaytracingShape {
 	constructor(obj) {
 		if (!obj)
 			obj = {};
 		super('rectangle');
-		this.sideU = temp(obj.sideU || ONE);
-		this.sideV = temp(obj.sideV || ONE);
-		this.normal = temp(obj.normal || Y);
-		this.position = temp(obj.position || ZERO_VEC);
+		this.sideU = temp(obj.sideU || 1.0);
+		this.sideV = temp(obj.sideV || 1.0);
+		this.normal = temp(obj.normal || vec3(0, 1, 0));
+		this.position = temp(obj.position || vec3(0, 0, 0));
 		this.singleSided = obj.singleSided === true;
 	}
 	
 	intersect(ray) {
 		const intersections = RaytracingPlane.prototype.intersect.call(this, ray);
 		
-		const distanceVector = temp(mul(TWO, sub(intersections.intersections[0].point, this.position)));
+		const distanceVector = temp(mul(2, sub(intersections.intersections[0].point, this.position)));
 		
 		const [_, U, V] = generateOrthonormalBasis(this.normal);
 		
