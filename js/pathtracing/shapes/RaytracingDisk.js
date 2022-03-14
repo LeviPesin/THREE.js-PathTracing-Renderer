@@ -4,13 +4,10 @@ import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
 export default class RaytracingDisk extends RaytracingShape {
-	constructor(obj) {
-		if (!obj)
-			obj = {};
-		super('disk');
+	constructor(obj = {}) {
+		super('disk', obj);
 		this.radius = temp(obj.radius || 1.0);
 		this.normal = temp(obj.normal || vec3(0, 1, 0));
-		this.position = temp(obj.position || vec3(0, 0, 0));
 		this.singleSided = obj.singleSided === true;
 	}
 	

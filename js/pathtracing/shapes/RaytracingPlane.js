@@ -4,16 +4,13 @@ import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 
 export default class RaytracingPlane extends RaytracingShape {
-	constructor(obj) {
-		if (!obj)
-			obj = {};
-		super('plane');
+	constructor(obj = {}) {
 		if (obj.plane) {
 			obj.normal = temp(obj.plane.xyz);
 			obj.position = temp(mul(obj.plane.w, obj.normal));
 		}
+		super('plane', obj);
 		this.normal = temp(obj.normal || vec3(0, 1, 0));
-		this.position = temp(obj.position || vec3(0, 0, 0));
 		this.singleSided = obj.singleSided === true;
 	}
 	

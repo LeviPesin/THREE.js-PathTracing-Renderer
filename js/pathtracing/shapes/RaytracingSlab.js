@@ -4,13 +4,10 @@ import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
 export default class RaytracingSlab extends RaytracingShape {
-	constructor(obj) {
-		if (!obj)
-			obj = {};
-		super('slab');
+	constructor(obj = {}) {
+		super('slab', obj);
 		this.depth = temp(obj.depth || 1.0);
 		this.normal = temp(obj.normal || vec3(0, 1, 0));
-		this.position = temp(obj.position || vec3(0, 0, 0));
 	}
 	
 	intersect(ray) {

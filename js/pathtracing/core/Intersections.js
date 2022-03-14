@@ -7,7 +7,7 @@ export class Intersection {
 		this.normal = temp(normal);
 		this.emission = temp(emission);
 		this.color = temp(color);
-		this.type = temp(type);
+		this.type = type;
 	}
 }
 

@@ -5,14 +5,11 @@ import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
 
 export default class RaytracingRectangle extends RaytracingShape {
-	constructor(obj) {
-		if (!obj)
-			obj = {};
-		super('rectangle');
+	constructor(obj = {}) {
+		super('rectangle', obj);
 		this.sideU = temp(obj.sideU || 1.0);
 		this.sideV = temp(obj.sideV || 1.0);
 		this.normal = temp(obj.normal || vec3(0, 1, 0));
-		this.position = temp(obj.position || vec3(0, 0, 0));
 		this.singleSided = obj.singleSided === true;
 	}
 	
