@@ -1,4 +1,14 @@
-import {ShaderNode, int, float, uint, temp, pixel, add, mul, sub, remainder, floor, shiftRight, bitXor, sqrt, join, sin, cos, dot, greaterThanEqual, cond, negate} from 'three-nodes/ShaderNode.js';
+import {
+	ShaderNode,
+	int, float, uint,
+	temp, pixel, join, cond,
+	add, mul, sub, remainder, floor,
+	shiftRight, bitXor,
+	sqrt, sin, cos, dot,
+	lessThan, greaterThanEqual,
+	negate, normalize, mix
+} from 'three-nodes/ShaderNode.js';
+import generateOrthonormalBasis from './GenerateOrthonormalBasis.js';
 import WebGLComputationRenderer from './WebGLComputationalRenderer.js';
 import WebGPUComputationRenderer from './WebGPUComputationalRenderer.js';
 import {resolution, frameCounter} from '../constants/UniformNodes.js';
@@ -83,15 +93,44 @@ export function randomInclusive() { //returns a value between 0 (inclusive) and 
 	return temp(mul(getNextHash(), ONE_OVER_MAX_UINT));
 }
 
-export function randomDirection() { //based on https://mathworld.wolfram.com/SpherePointPicking.html
-	const u = temp(sub(mul(2, randomInclusive()), 1));
-	const root = temp(sqrt(sub(1, mul(u, u))));
-	const theta = temp(mul(2 * Math.PI, random()));
-	return temp(join(mul(root, cos(theta)), mul(root, sin(theta)), u));
+export function eventHappened(probability) { //checks if event with given probability has happened
+	return lessThan(random(), probability);
 }
 
-export function randomHemisphereDirection(normal) {
-	const direction = randomDirection();
-	const condition = greaterThanEqual(dot(direction, normal), 0);
-	return temp(cond(condition, normal, negate(normal)));
+function getDirection(u, sqr = mul(u, u)) {
+	const root = temp(sqrt(sub(1, sqr)));
+	const theta = temp(mul(2 * Math.PI, random()));
+	return [mul(root, cos(theta)), mul(root, sin(theta)), u];
+}
+
+export function randomDirection() { //based on https://mathworld.wolfram.com/SpherePointPicking.html
+	const u = temp(sub(mul(2, randomInclusive()), 1));
+	return temp(join(...getDirection(u)));
+}
+
+export function randomHemisphereDirection(normal, cosineWeighted = true) {
+	if (!cosineWeighted) { //here we can skip the construction of an orthonormal basis for speed
+		const direction = randomDirection();
+		const condition = greaterThanEqual(dot(direction, normal), 0);
+		return temp(cond(condition, normal, negate(normal)));
+	}
+	
+	//TODO: test the speed with rotation instead of orthonormal basis:
+	
+	//orthonormal basis generation here can be changed to just generating direction with sqrt(rand)
+	//and then rotating the vector with the following rotation matrix (which rotates the Z axis to normal vector {x, y, z}):
+	// {{z + y^2 / (1 + z), -xy / (1 + z), x}, {-xy / (1 + z), 1 - y^2 / (1 + z), y}, {-x, -y, z}}
+	//matrix can be checked with the code
+	// Simplify[RotationMatrix[{{0, 0, 1}, {x, y, z}}] == {{z + y^2/(1 + z), (-x y)/(1 + z), x}, {(-x y)/(1 + z), 1 - y^2/(1 + z), y}, {-x, -y, z}}, Assumptions -> x \[Element] Reals && y \[Element] Reals && z \[Element] Reals && x^2 + y^2 + z^2 == 1]
+	//in Wolfram Mathematica
+	
+	const rand = randomInclusive();
+	const dir = getDirection(sqrt(rand), rand); //without the sqrt it would be just normal, uncosine-weighted direction
+	const [_, U, V] = generateOrthonormalBasis(normal);
+	return temp(normalize(add(mul(dir[0], U), mul(dir[1], V), mul(dir[2], normal))));
+}
+
+export function randomSpecularLobeDirection(reflectionDirection, roughness) {
+	const direction = mix(reflectionDirection, randomHemisphereDirection(reflectionDirection), mul(roughness, sqrt(roughness)));
+	return temp(normalize(direction));
 }
