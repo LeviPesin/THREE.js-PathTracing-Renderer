@@ -1,12 +1,12 @@
 import {
 	ShaderNode,
-	int, float, uint,
-	temp, pixel, join, cond,
-	add, mul, sub, remainder, floor,
+	int, float, uint, vec3, mat3,
+	temp, pixel, cond,
+	add, mul, remainder, floor,
 	shiftRight, bitXor,
 	sqrt, sin, cos, dot,
 	lessThan, greaterThanEqual,
-	negate, normalize, mix
+	negate, invert, normalize, mix
 } from 'three-nodes/ShaderNode.js';
 import generateOrthonormalBasis from './GenerateOrthonormalBasis.js';
 import WebGLComputationRenderer from './WebGLComputationalRenderer.js';
@@ -98,14 +98,33 @@ export function eventHappened(probability) { //checks if event with given probab
 }
 
 function getDirection(u, sqr = mul(u, u)) {
-	const root = temp(sqrt(sub(1, sqr)));
+	const root = temp(sqrt(invert(sqr)));
 	const theta = temp(mul(2 * Math.PI, random()));
 	return [mul(root, cos(theta)), mul(root, sin(theta)), u];
 }
 
 export function randomDirection() { //based on https://mathworld.wolfram.com/SpherePointPicking.html
-	const u = temp(sub(mul(2, randomInclusive()), 1));
-	return temp(join(...getDirection(u)));
+	const u = temp(invert(mul(2, randomInclusive())));
+	return temp(vec3(...getDirection(u)));
+}
+
+function getRotationMatrix(normal) {
+	//the following rotation matrix rotates the Z axis to normal vector {x, y, z}:
+	// {{z + y^2 / (1 + z), -xy / (1 + z), x}, {-xy / (1 + z), 1 - y^2 / (1 + z), y}, {-x, -y, z}}
+	//matrix can be checked with the code
+	// Simplify[RotationMatrix[{{0, 0, 1}, {x, y, z}}] == {{z + y^2/(1 + z), (-x y)/(1 + z), x}, {(-x y)/(1 + z), 1 - y^2/(1 + z), y}, {-x, -y, z}}, Assumptions -> x \[Element] Reals && y \[Element] Reals && z \[Element] Reals && x^2 + y^2 + z^2 == 1]
+	//in Wolfram Mathematica
+	const minusX = temp(negate(normal.x));
+	const minusY = temp(negate(normal.y));
+	
+	const yOverZPlus1 = temp(div(normal.y, add(normal.z + 1)));
+	const ySquaredOverZPlus1 = temp(mul(normal.y, yOverZPlus1));
+	const minusXYOverZPlus1 = temp(mul(minusX, yOverZPlus1));
+	
+	const matrix = mat3(add(normal.z, ySquaredOverZPlus1), minusXYOverZPlus1,          minusX,
+						minusXYOverZPlus1,                 invert(ySquaredOverZPlus1), minusY,
+						normal.x,                          normal.y,                   normal.z);
+	return temp(cond(lessThan(-1, normal.z), matrix, mat3(-1, 0, 0, 0, -1, 0, 0, 0, -1)));
 }
 
 export function randomHemisphereDirection(normal, cosineWeighted = true) {
@@ -115,13 +134,9 @@ export function randomHemisphereDirection(normal, cosineWeighted = true) {
 		return temp(cond(condition, normal, negate(normal)));
 	}
 	
-	//orthonormal basis generation here can be changed to just generating direction with sqrt(rand) and then rotating it
-	//but it is slightly slower, see https://www.shadertoy.com/view/7lXyDn
-	
 	const rand = randomInclusive();
 	const dir = getDirection(sqrt(rand), rand); //without the sqrt it would be just normal, uncosine-weighted direction
-	const [_, U, V] = generateOrthonormalBasis(normal);
-	return temp(normalize(add(mul(dir[0], U), mul(dir[1], V), mul(dir[2], normal))));
+	return temp(mul(getRotationMatrix(normal), dir));
 }
 
 export function randomSpecularLobeDirection(reflectionDirection, roughness) {
