@@ -8,7 +8,6 @@ import {
 	lessThan, greaterThanEqual,
 	negate, invert, normalize, mix
 } from 'three-nodes/ShaderNode.js';
-import generateOrthonormalBasis from './GenerateOrthonormalBasis.js';
 import WebGLComputationRenderer from './WebGLComputationalRenderer.js';
 import WebGPUComputationRenderer from './WebGPUComputationalRenderer.js';
 import {resolution, frameCounter} from '../constants/UniformNodes.js';
@@ -128,7 +127,7 @@ function getRotationMatrix(normal) {
 }
 
 export function randomHemisphereDirection(normal, cosineWeighted = true) {
-	if (!cosineWeighted) { //here we can skip the construction of an orthonormal basis for speed
+	if (!cosineWeighted) { //here we can skip the construction of an orthonormal basis or rotation for speed
 		const direction = randomDirection();
 		const condition = greaterThanEqual(dot(direction, normal), 0);
 		return temp(cond(condition, normal, negate(normal)));
