@@ -115,14 +115,8 @@ export function randomHemisphereDirection(normal, cosineWeighted = true) {
 		return temp(cond(condition, normal, negate(normal)));
 	}
 	
-	//TODO: test the speed with rotation instead of orthonormal basis:
-	
-	//orthonormal basis generation here can be changed to just generating direction with sqrt(rand)
-	//and then rotating the vector with the following rotation matrix (which rotates the Z axis to normal vector {x, y, z}):
-	// {{z + y^2 / (1 + z), -xy / (1 + z), x}, {-xy / (1 + z), 1 - y^2 / (1 + z), y}, {-x, -y, z}}
-	//matrix can be checked with the code
-	// Simplify[RotationMatrix[{{0, 0, 1}, {x, y, z}}] == {{z + y^2/(1 + z), (-x y)/(1 + z), x}, {(-x y)/(1 + z), 1 - y^2/(1 + z), y}, {-x, -y, z}}, Assumptions -> x \[Element] Reals && y \[Element] Reals && z \[Element] Reals && x^2 + y^2 + z^2 == 1]
-	//in Wolfram Mathematica
+	//orthonormal basis generation here can be changed to just generating direction with sqrt(rand) and then rotating it
+	//but it is slightly slower, see https://www.shadertoy.com/view/7lXyDn
 	
 	const rand = randomInclusive();
 	const dir = getDirection(sqrt(rand), rand); //without the sqrt it would be just normal, uncosine-weighted direction
