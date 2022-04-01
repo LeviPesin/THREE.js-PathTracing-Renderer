@@ -1,4 +1,4 @@
-import {temp} from 'three-nodes/ShaderNode.js';
+import {temp} from 'three-nodes/Nodes.js';
 
 export class Intersection {
 	constructor({distance, point, normal, emission, color, type}) {

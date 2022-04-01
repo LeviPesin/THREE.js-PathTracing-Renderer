@@ -1,5 +1,5 @@
 import {BufferAttribute} from 'three';
-import {storage, element, assign} from 'three-nodes/ShaderNode.js';
+import {storage, element, assign} from 'three-nodes/Nodes.js';
 import TypedBuffer from './TypedBuffer.js';
 
 export default class WebGPUTypedBuffer extends TypedBuffer {

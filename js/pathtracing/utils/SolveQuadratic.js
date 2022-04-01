@@ -1,4 +1,4 @@
-import {float, temp, add, sub, mul, div, lessThan, sqrt, cond, INFINITY} from 'three-nodes/ShaderNode.js';
+import {float, temp, add, sub, mul, div, lessThan, sqrt, cond, INFINITY} from 'three-nodes/Nodes.js';
 
 //optimized algorithm for solving quadratic equations developed by Dr. Po-Shen Loh -> https://youtu.be/XKBX0r3J-9Y
 //adapted to root finding for all quadric shapes (sphere, ellipsoid, cylinder, cone, etc.) by Erich Loftis

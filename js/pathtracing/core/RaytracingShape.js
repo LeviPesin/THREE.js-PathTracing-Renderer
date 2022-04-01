@@ -1,4 +1,4 @@
-import {vec3, temp} from 'three-nodes/ShaderNode.js';
+import {vec3, temp} from 'three-nodes/Nodes.js';
 
 export default class RaytracingShape {
 	constructor(type, obj = {}) {

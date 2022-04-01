@@ -1,4 +1,4 @@
-import {float, vec3, temp, dot, add, sub, mul, div, greaterThan, cond, INFINITY} from 'three-nodes/ShaderNode.js';
+import {float, vec3, temp, dot, add, sub, mul, div, greaterThan, cond, INFINITY} from 'three-nodes/Nodes.js';
 import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 

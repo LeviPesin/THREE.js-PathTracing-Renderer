@@ -1,5 +1,5 @@
 import {Camera, Mesh, PlaneGeometry, Scene, WebGLRenderTarget} from 'three';
-import {int, vec2, temp, pixel, add, mul} from 'three-nodes/ShaderNode.js';
+import {int, vec2, temp, pixel, add, mul} from 'three-nodes/Nodes.js';
 import MeshBasicNodeMaterial from 'three-nodes/materials/MeshBasicNodeMaterial.js';
 import {} from 'three-webgl/nodes/WebGLNodes.js';
 import WebGLTypedBuffer from './WebGLTypedBuffer.js';

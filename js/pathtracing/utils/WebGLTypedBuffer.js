@@ -25,7 +25,7 @@ import {
 	vec2, ivec2, uvec2,
 	vec3, ivec3, uvec3,
 	vec4, ivec4, uvec4
-} from 'three-nodes/ShaderNode.js';
+} from 'three-nodes/Nodes.js';
 import TypedBuffer from './TypedBuffer.js';
 
 function getTextureElement(dataTexture, i, width, height) {

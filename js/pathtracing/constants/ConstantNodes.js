@@ -1,4 +1,4 @@
-import {int} from 'three-nodes/ShaderNode.js';
+import {int} from 'three-nodes/Nodes.js';
 
 export const SPOT_LIGHT  = int(-2);
 export const POINT_LIGHT = int(-1);

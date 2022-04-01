@@ -7,7 +7,7 @@ import {
 	sqrt, sin, cos, dot,
 	lessThan, greaterThanEqual,
 	negate, invert, normalize, mix
-} from 'three-nodes/ShaderNode.js';
+} from 'three-nodes/Nodes.js';
 import WebGLComputationRenderer from './WebGLComputationalRenderer.js';
 import WebGPUComputationRenderer from './WebGPUComputationalRenderer.js';
 import {resolution, frameCounter} from '../constants/UniformNodes.js';

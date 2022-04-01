@@ -1,4 +1,4 @@
-import {float, vec3, temp, mul, sub, or, greaterThan, abs, dot, cond, INIFINITY} from 'three-nodes/ShaderNode.js';
+import {float, vec3, temp, mul, sub, or, greaterThan, abs, dot, cond, INIFINITY} from 'three-nodes/Nodes.js';
 import generateOrthonormalBasis from '../utils/GenerateOrthonormalBasis.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 import RaytracingPlane from './RaytracingPlane.js';
