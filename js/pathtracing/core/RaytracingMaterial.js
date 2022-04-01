@@ -1,10 +1,10 @@
 import {DIFF} from '../constants/ConstantNodes.js';
-import {vec3, temp} from 'three-nodes/Nodes.js';
+import {vec3} from 'three-nodes/Nodes.js';
 
 export default class RaytracingMaterial {
 	constructor(type = DIFF, color = vec3(1, 1, 1), emission = vec3(0, 0, 0)) {
 		this.type = type;
-		this.color = temp(color);
-		this.emission = temp(emission);
+		this.color = color;
+		this.emission = emission;
 	}
 }

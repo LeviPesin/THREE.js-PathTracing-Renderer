@@ -1,4 +1,4 @@
-import {float, temp, add, sub, mul, div, dot} from 'three-nodes/Nodes.js';
+import {float, add, sub, mul, div, dot} from 'three-nodes/Nodes.js';
 import solveQuadratic from '../utils/SolveQuadratic.js';
 import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';
@@ -6,22 +6,22 @@ import RaytracingShape from '../core/RaytracingShape.js';
 export default class RaytracingSphere extends RaytracingShape {
 	constructor(obj = {}) {
 		super('sphere', obj);
-		this.radius = temp(obj.radius || 1.0);
+		this.radius = obj.radius || 1.0;
 	}
 	
 	intersect(ray) {
-		const sphereToRay = temp(sub(ray.origin, this.position));
+		const sphereToRay = sub(ray.origin, this.position);
 	
-		const a = temp(dot(ray.direction, ray.direction));
-		const b = temp(mul(2, dot(ray.direction, sphereToRay)));
-		const c = temp(sub(dot(sphereToRay, sphereToRay), mul(this.radius, this.radius)));
+		const a = dot(ray.direction, ray.direction);
+		const b = mul(2, dot(ray.direction, sphereToRay));
+		const c = sub(dot(sphereToRay, sphereToRay), mul(this.radius, this.radius));
 		
 		const {minRoot, maxRoot} = solveQuadratic(a, b, c);
 		
-		const point1 = temp(add(ray.origin, mul(minRoot, ray.direction)));
-		const point2 = temp(add(ray.origin, mul(maxRoot, ray.direction)));
+		const point1 = add(ray.origin, mul(minRoot, ray.direction));
+		const point2 = add(ray.origin, mul(maxRoot, ray.direction));
 		
-		const normalCoeff = temp(div(1, this.radius));
+		const normalCoeff = div(1, this.radius);
 		
 		const intersection1 = new Intersection({
 			distance: minRoot,

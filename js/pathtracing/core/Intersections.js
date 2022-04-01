@@ -1,12 +1,10 @@
-import {temp} from 'three-nodes/Nodes.js';
-
 export class Intersection {
 	constructor({distance, point, normal, emission, color, type}) {
-		this.distance = temp(distance);
-		this.point = temp(point);
-		this.normal = temp(normal);
-		this.emission = temp(emission);
-		this.color = temp(color);
+		this.distance = distance;
+		this.point = point;
+		this.normal = normal;
+		this.emission = emission;
+		this.color = color;
 		this.type = type;
 	}
 }

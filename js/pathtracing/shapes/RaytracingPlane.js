@@ -1,23 +1,23 @@
-import {float, vec3, temp, dot, add, sub, mul, div, greaterThan, cond, INFINITY} from 'three-nodes/Nodes.js';
+import {float, vec3, dot, add, sub, mul, div, greaterThan, cond, INFINITY} from 'three-nodes/Nodes.js';
 import {Intersection, RayObjectIntersections} from '../core/Intersections.js';
 import RaytracingShape from '../core/RaytracingShape.js';
 
 export default class RaytracingPlane extends RaytracingShape {
 	constructor(obj = {}) {
 		if (obj.plane) {
-			obj.normal = temp(obj.plane.xyz);
-			obj.position = temp(mul(obj.plane.w, obj.normal));
+			obj.normal = obj.plane.xyz;
+			obj.position = mul(obj.plane.w, obj.normal);
 		}
 		super('plane', obj);
-		this.normal = temp(obj.normal || vec3(0, 1, 0));
+		this.normal = obj.normal || vec3(0, 1, 0);
 		this.singleSided = obj.singleSided === true;
 	}
 	
 	intersect(ray) {
-		const denominator = temp(dot(this.normal, ray.direction));
+		const denominator = dot(this.normal, ray.direction);
 		
 		const rayToPlane = sub(this.position, ray.origin);
-		const result = temp(div(dot(rayToPlane, this.normal), denominator));
+		const result = div(dot(rayToPlane, this.normal), denominator);
 		
 		const actualResult = cond(greaterThan(result, 0), result, INFINITY);
 		
@@ -26,8 +26,6 @@ export default class RaytracingPlane extends RaytracingShape {
 			distance = cond(greaterThan(denominator, 0), INFINITY, actualResult);
 		else
 			distance = actualResult;
-		
-		distance = temp(distance);
 		
 		const intersection = new Intersection({
 			distance,
